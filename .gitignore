@@ -1,1 +1,71 @@
-*.md
+# =============================================================
+#  Liriel - .gitignore
+# =============================================================
+
+# ── Python ────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+
+# ── Entorno virtual ───────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ── Distribución / empaquetado ────────────────────────────────
+build/
+dist/
+*.spec
+*.egg-info/
+*.egg
+MANIFEST
+
+# ── PyInstaller ───────────────────────────────────────────────
+# Archivos generados al empaquetar con pyinstaller
+*.manifest
+
+# ── Archivos de personaje (datos de usuario) ─────────────────
+characters/
+*.liriel
+
+# ── Tests ─────────────────────────────────────────────────────
+tests/
+
+# ── PyCharm / JetBrains ───────────────────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.idea_modules/
+
+# ── Pytest / cobertura ────────────────────────────────────────
+.pytest_cache/
+.cache/
+.coverage
+coverage.xml
+htmlcov/
+*.log
+
+# ── Mypy / type checkers ──────────────────────────────────────
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# ── Variables de entorno ──────────────────────────────────────
+.env
+.env.*
+
+# ── Sistema operativo ─────────────────────────────────────────
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ── Temporales de editor ──────────────────────────────────────
+*.swp
+*.swo
+*~
