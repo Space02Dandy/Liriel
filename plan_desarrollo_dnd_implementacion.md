@@ -1,346 +1,666 @@
-# Plan de Implementacion de Liriel
+# Plan de Implementación de Liriel
 
-## Objetivo
-Construir una aplicacion de escritorio gratuita y open-source para gestionar hojas de personaje completas de D&D 5.5e usando **Python + PySide6** y assets de pixel art propios.
-
-## Decision tecnica principal
-
-- **GUI:** PySide6
-- **Renderizado pixel art:** `Qt.FastTransformation` y pintado manual con `QPainter`
-- **Logica de reglas:** capa separada sin dependencia de Qt
-- **Datos:** JSON locales
-- **Persistencia de personajes:** JSON propio `.liriel`
-
-## Estructura recomendada del proyecto
-
-```
-Liriel/
-├── main.py
-├── requirements.txt
-├── data/
-├── assets/
-├── src/
-│   ├── data/
-│   ├── engine/
-│   ├── ui/
-│   └── utils/
-├── tests/
-└── characters/
-```
-
-## Reglas de arquitectura
-
-- La UI nunca debe calcular reglas de D&D.
-- El motor nunca debe importar PySide6.
-- Todos los datos del juego vienen de JSON.
-- Cada cambio de personaje debe pasar por el motor y luego refrescar la UI.
-- Cualquier calculo derivado debe ser reproducible y testeable.
+> **Recordatorio de alcance:** Liriel es ÚNICA Y EXCLUSIVAMENTE un Constructor y Gestor de
+> Hojas de Personaje para D&D 5.5e. NO es un VTT, NO tiene combate en tiempo real,
+> NO tiene tirador de dados interactivo. Cada fase construye solo funcionalidad de hoja.
 
 ---
 
-## Fase 0. Preparacion del proyecto
+## Objetivo
 
-### Objetivo
-Dejar el repositorio listo para trabajar sin bloqueos.
+Aplicación de escritorio gratuita y open-source para gestionar hojas de personaje completas
+de D&D 5.5e (Revisión 2024) usando **Python + PySide6** y assets de pixel art propios.
 
-- [ ] Crear `requirements.txt` con `PySide6`, `pytest`, `pyinstaller` y utilidades necesarias.
-- [ ] Crear la estructura de carpetas completa del proyecto.
-- [ ] Crear `main.py` minimo que solo arranque la app y abra una ventana vacia.
-- [ ] Crear `src/__init__.py`, `src/data/__init__.py`, `src/engine/__init__.py`, `src/ui/__init__.py`, `src/utils/__init__.py`.
-- [ ] Crear `.gitignore` para `__pycache__`, `.venv`, `build`, `dist`, `characters` y archivos temporales de PyCharm.
-- [ ] Crear `tests/test_smoke.py` para verificar que el entorno de pruebas funciona.
+---
+
+## Decisión técnica principal
+
+| Capa | Tecnología | Razón |
+|---|---|---|
+| GUI | PySide6 | Licencia LGPL, maduro, buen soporte de pixel art con `QPainter` |
+| Lógica de reglas | Python puro | Testeable sin Qt, sin acoplamiento |
+| Datos de juego | JSON locales en `data/` | Legibles, sin base de datos |
+| Persistencia | `.liriel` (JSON renombrado) en `characters/` | Un archivo por personaje |
+| Tests | pytest + pytest-qt | Cubre tanto el motor como la UI |
+| Distribución | PyInstaller | Ejecutable sin instalar Python |
+
+---
+
+## Arquitectura — Reglas de separación
+
+```
+┌──────────────┐       ┌──────────────────┐       ┌───────────────┐
+│  src/ui/     │──────▶│  src/engine/     │──────▶│  src/data/    │
+│  (PySide6)   │ señal │  (Python puro)   │ repo  │  (JSON+models)│
+└──────────────┘       └──────────────────┘       └───────────────┘
+```
+
+- **La UI nunca calcula reglas de D&D.** Solo llama al motor y refresca widgets.
+- **El motor nunca importa PySide6.** Solo recibe datos y devuelve resultados.
+- **Todos los datos del juego vienen de JSON.** No hay reglas quemadas en código.
+- **Cada cambio de personaje pasa por el motor** → luego refresca la UI.
+- **Todo cálculo derivado es testeable** sin abrir ventana.
+
+---
+
+## Estructura del proyecto
+
+```
+Liriel/
+├── main.py                    # Punto de entrada
+├── requirements.txt
+├── data/                      # JSON de reglas del juego (estáticos)
+│   ├── classes.json
+│   ├── subclasses.json
+│   ├── species.json
+│   ├── backgrounds.json
+│   ├── feats.json
+│   ├── spells.json
+│   ├── weapons.json
+│   ├── armor.json
+│   └── equipment.json
+├── assets/                    # Sprites, iconos, fuentes pixel art
+│   ├── icons/
+│   ├── sprites/
+│   └── fonts/
+├── characters/                # Archivos .liriel guardados por el usuario
+├── src/
+│   ├── data/                  # Modelos, loaders y repositorio
+│   │   ├── __init__.py
+│   │   ├── models.py
+│   │   ├── loader.py
+│   │   └── repository.py
+│   ├── engine/                # Motor de reglas puro
+│   │   ├── __init__.py
+│   │   ├── enums.py
+│   │   ├── character.py       # CharacterState
+│   │   ├── factory.py         # CharacterFactory (creación)
+│   │   ├── progression.py     # LevelUpEngine
+│   │   ├── combat.py          # CA, iniciativa (solo cálculos pasivos)
+│   │   ├── spellcasting.py    # Slots, conjuros conocidos/preparados
+│   │   ├── validation.py      # Validación de elecciones
+│   │   └── retroactivity.py   # Recálculo retroactivo CON
+│   ├── ui/                    # Capa visual PySide6
+│   │   ├── __init__.py
+│   │   ├── app.py             # QApplication y QMainWindow
+│   │   ├── theme.py           # Paleta dark fantasy, QSS, fuentes
+│   │   ├── pixel_art.py       # Utilidades QPainter pixel-perfect
+│   │   ├── navigation.py      # Gestión de pantallas/escenas
+│   │   ├── scenes/
+│   │   │   ├── main_menu.py
+│   │   │   ├── creation_wizard.py
+│   │   │   ├── character_sheet.py
+│   │   │   ├── level_up_scene.py
+│   │   │   └── inventory_scene.py
+│   │   └── widgets/
+│   │       ├── pixel_label.py
+│   │       ├── pixel_button.py
+│   │       ├── pixel_panel.py
+│   │       ├── stat_widget.py
+│   │       ├── skill_widget.py
+│   │       └── spell_widget.py
+│   └── utils/
+│       ├── __init__.py
+│       └── file_io.py         # Guardar/cargar .liriel
+├── tests/
+│   ├── test_smoke.py
+│   ├── test_loader.py
+│   ├── test_factory.py
+│   ├── test_progression.py
+│   ├── test_retroactivity.py
+│   └── test_spellcasting.py
+└── scripts/
+    └── test_creation.py       # Script de consola para generar personajes de prueba
+```
+
+---
+
+## Orden real de implementación (referencia global)
+
+1. `enums.py`
+2. `models.py`
+3. `loader.py`
+4. `repository.py`
+5. JSON mínimos funcionales (todas las clases del SRD)
+6. `character.py` (CharacterState)
+7. `combat.py` (CA e iniciativa pasivos)
+8. `spellcasting.py`
+9. `validation.py`
+10. `factory.py` (CharacterFactory nivel 1)
+11. `progression.py` (LevelUpEngine)
+12. `retroactivity.py`
+13. `file_io.py`
+14. `theme.py` + `pixel_art.py`
+15. `app.py` + `navigation.py`
+16. `main_menu.py`
+17. Widgets base (`pixel_button`, `stat_widget`, etc.)
+18. `creation_wizard.py`
+19. `character_sheet.py`
+20. `level_up_scene.py`
+21. `inventory_scene.py`
+22. Assets finales (Aseprite)
+23. Tests de integración completos
+24. Empaquetado con PyInstaller
+
+---
+
+## Fase 0 — Preparación del proyecto
+
+**Objetivo:** Repositorio listo para trabajar sin bloqueos.
+
+### Estado actual ✅
+- `main.py` abre una ventana PySide6 vacía.
+- `requirements.txt` con PySide6, pytest, pytest-qt, pyinstaller.
+- Estructura `src/data`, `src/engine`, `src/ui`, `src/utils` creada.
+- `.gitignore` presente.
+
+### Tareas pendientes
+
+- [ ] Verificar que `main.py` abre sin errores (`python main.py`).
+- [ ] Verificar que `pytest` pasa con un `test_smoke.py` básico.
+- [ ] Confirmar que el `.gitignore` excluye `characters/`, `build/`, `dist/`, `.venv/`.
 
 ### Resultado esperado
 El proyecto abre y el entorno ejecuta tests sin fallar.
 
 ---
 
-## Fase 1. Base de datos JSON y cargador
+## Fase 1 — Base de datos JSON y cargador
 
-### Objetivo
-Poder leer todas las reglas del juego desde archivos estaticos.
+**Objetivo:** Leer todas las reglas del juego desde archivos estáticos y validarlas.
 
-- [ ] Crear `src/engine/enums.py` con las enumeraciones base: abilities, skills, schools, armor categories, feat types, sizes y damage types.
-- [ ] Crear `src/data/models.py` con dataclasses para clases, subclases, especies, trasfondos, conjuros, dotes, armas, armaduras y equipo.
-- [ ] Crear `src/data/loader.py` con funciones de carga por archivo:
-  - `load_classes()`
-  - `load_subclasses()`
-  - `load_species()`
-  - `load_backgrounds()`
-  - `load_spells()`
-  - `load_feats()`
-  - `load_weapons()`
-  - `load_armor()`
-  - `load_equipment()`
-- [ ] Crear `src/data/repository.py` con un repositorio unico para consultar por `slug`.
-- [ ] Crear el contenido inicial de `data/classes.json`.
-- [ ] Crear el contenido inicial de `data/subclasses.json`.
-- [ ] Crear el contenido inicial de `data/species.json`.
-- [ ] Crear el contenido inicial de `data/backgrounds.json`.
-- [ ] Crear el contenido inicial de `data/spells.json`.
-- [ ] Crear el contenido inicial de `data/feats.json`.
-- [ ] Crear el contenido inicial de `data/weapons.json`.
-- [ ] Crear el contenido inicial de `data/armor.json`.
-- [ ] Crear el contenido inicial de `data/equipment.json`.
-- [ ] Escribir tests de validacion de carga en `tests/test_loader.py`.
-- [ ] Escribir tests de referencias cruzadas entre archivos.
+### Tareas — Motor
 
-### Orden exacto de trabajo en esta fase
+- [ ] Crear `src/engine/enums.py`:
+  - `Ability` (STR, DEX, CON, INT, WIS, CHA)
+  - `Skill` (todas las 18 habilidades de 5.5e)
+  - `ArmorCategory` (light, medium, heavy, shield)
+  - `WeaponCategory` (simple_melee, simple_ranged, martial_melee, martial_ranged)
+  - `SpellSchool` (Abjuration, Conjuration, Divination, Enchantment, Evocation, Illusion, Necromancy, Transmutation)
+  - `FeatType` (origin, general, epic)
+  - `CreatureSize` (Tiny, Small, Medium, Large, Huge, Gargantuan)
+  - `DamageType` (acid, bludgeoning, cold, fire, force, lightning, necrotic, piercing, poison, psychic, radiant, slashing, thunder)
+  - `SpellPreparation` (known, prepared)
 
-1. Crear `enums.py`.
-2. Crear `models.py`.
-3. Crear `loader.py`.
-4. Crear `repository.py`.
-5. Escribir los JSON minimos funcionales.
-6. Validar con tests.
+### Tareas — Modelos y cargador
+
+- [ ] Crear `src/data/models.py` con dataclasses:
+  - `ClassData`, `SubclassData`, `SpeciesData`, `BackgroundData`
+  - `FeatData`, `SpellData`, `WeaponData`, `ArmorData`, `EquipmentData`
+- [ ] Crear `src/data/loader.py` con una función por archivo:
+  - `load_classes() -> dict[str, ClassData]`
+  - `load_subclasses() -> dict[str, SubclassData]`
+  - `load_species() -> dict[str, SpeciesData]`
+  - `load_backgrounds() -> dict[str, BackgroundData]`
+  - `load_feats() -> dict[str, FeatData]`
+  - `load_spells() -> dict[str, SpellData]`
+  - `load_weapons() -> dict[str, WeaponData]`
+  - `load_armor() -> dict[str, ArmorData]`
+  - `load_equipment() -> dict[str, EquipmentData]`
+  - Función `validate_all(repo)` que lanza `DataIntegrityError` si hay referencias rotas.
+- [ ] Crear `src/data/repository.py` con `GameDataRepository` (singleton, interfaz documentada en `plan_desarrollo_dnd_json.md`).
+
+### Tareas — Archivos JSON
+
+- [ ] `data/classes.json` — Incluir al menos: Bárbaro, Bardo, Clérigo, Druida, Guerrero, Monje, Paladín, Explorador, Pícaro, Hechicero, Brujo, Mago.
+- [ ] `data/subclasses.json` — 2-3 subclases por clase (las del SRD 2024).
+- [ ] `data/species.json` — Humano, Elfo, Enano, Halfling, Gnomo, Semiorco, Tiefling, Draconiano.
+- [ ] `data/backgrounds.json` — Al menos 10 trasfondos del manual básico 2024.
+- [ ] `data/feats.json` — Todas las dotes de origen + dotes generales del SRD.
+- [ ] `data/weapons.json` — Todas las armas simples y marciales del SRD.
+- [ ] `data/armor.json` — Todas las armaduras y escudo del SRD.
+- [ ] `data/equipment.json` — Paquetes de clase, herramientas, equipo básico.
+- [ ] `data/spells.json` — Conjuros del SRD niveles 0-9 (mínimo 50 conjuros representativos por escuela).
+
+### Tareas — Tests
+
+- [ ] `tests/test_loader.py`:
+  - Verificar que todos los JSON cargan sin excepción.
+  - Verificar que el recuento de objetos es correcto (≥ N por tipo).
+  - Verificar slugs únicos.
+- [ ] `tests/test_loader.py` — tests de referencias cruzadas:
+  - `class_slug` de subclases existe en clases.
+  - `origin_feat_slug` de trasfondos existe en dotes.
+  - Clases en `spells.json` existen en `classes.json`.
 
 ### Resultado esperado
-El proyecto puede arrancar, cargar datos y detectar errores de contenido.
+El proyecto arranca, carga datos y detecta cualquier error de contenido antes de mostrar UI.
 
 ---
 
-## Fase 2. Modelo de personaje
+## Fase 2 — Modelo de personaje
 
-### Objetivo
-Definir el objeto central que representa una hoja de personaje.
+**Objetivo:** Objeto central `CharacterState` que representa una hoja de personaje completa.
 
-- [ ] Crear `src/engine/character.py` con `CharacterState`.
-- [ ] Definir atributos basicos: nombre, clase, subclase, especie, trasfondo, nivel, atributos, HP, AC, iniciativa, velocidad, salvaciones, habilidades, equipo, conjuros y dotes.
-- [ ] Implementar propiedades calculadas para modificadores de atributo.
-- [ ] Implementar `to_dict()` y `from_dict()` para guardar/cargar.
-- [ ] Crear `src/utils/file_io.py` para persistencia `.liriel`.
-- [ ] Crear tests de serializacion y deserializacion.
+### Tareas
+
+- [ ] Crear `src/engine/character.py` con `CharacterState`:
+
+```python
+@dataclass
+class CharacterState:
+    # Identidad
+    name: str
+    class_slug: str
+    subclass_slug: str | None
+    species_slug: str
+    lineage_slug: str | None
+    background_slug: str
+    level: int
+
+    # Puntuaciones de característica (base + ASI acumulado)
+    ability_scores: dict[str, int]   # {"STR": 16, "DEX": 14, ...}
+
+    # Salud
+    hp_max: int
+    hp_current: int
+    hp_temp: int
+    hit_dice_used: int
+
+    # Equipo activo
+    armor_slug: str | None
+    shield_equipped: bool
+    weapons: list[str]               # slugs equipados
+    inventory: list[dict]            # {"slug": str, "qty": int}
+
+    # Conjuros
+    spells_known: list[str]          # slugs
+    spells_prepared: list[str]       # slugs (clases que preparan)
+    spell_slots_used: dict[str, int] # {"1": N_usados, "2": N_usados, ...}
+
+    # Opciones acumuladas
+    skill_proficiencies: list[str]
+    tool_proficiencies: list[str]
+    saving_throw_proficiencies: list[str]
+    feats: list[str]                 # slugs de dotes tomadas
+
+    # Metadatos
+    xp: int
+    created_at: str                  # ISO 8601
+    updated_at: str
+```
+
+- [ ] Implementar **propiedades calculadas** (no almacenadas):
+  - `ability_modifier(ability: str) -> int` → `floor((score - 10) / 2)`
+  - `proficiency_bonus() -> int` → según nivel total
+  - `initiative() -> int` → modificador DEX
+  - `ac() -> int` → según armadura equipada + DEX + escudo
+  - `spell_save_dc(ability: str) -> int` → `8 + PB + mod`
+  - `spell_attack_bonus(ability: str) -> int` → `PB + mod`
+  - `saving_throw(ability: str) -> int` → mod + PB si competente
+  - `skill_bonus(skill: str) -> int` → mod + PB si competente
+  - `weapon_attack_bonus(weapon_slug: str) -> int`
+  - `weapon_damage_bonus(weapon_slug: str) -> int`
+
+- [ ] Implementar `to_dict() -> dict` y `from_dict(d: dict) -> CharacterState`.
+- [ ] Crear `src/utils/file_io.py`:
+  - `save_character(character: CharacterState, path: Path) -> None`
+  - `load_character(path: Path) -> CharacterState`
+  - Formato: JSON con extensión `.liriel`
+- [ ] Tests de serialización: un personaje guardado y recargado debe ser idéntico.
+- [ ] Tests de propiedades calculadas con valores conocidos.
 
 ### Resultado esperado
-Un personaje puede existir en memoria, serializarse y recuperarse intacto.
+Un personaje puede existir en memoria, serializar a disco y recuperarse intacto.
 
 ---
 
-## Fase 3. Motor de creacion Nivel 1
+## Fase 3 — Motor de creación (Nivel 1)
 
-### Objetivo
-Construir un personaje completo sin interfaz, solo con motor Python.
+**Objetivo:** Construir un personaje nivel 1 completamente funcional solo con motor Python.
 
-- [ ] Crear `src/engine/validation.py` para validar elecciones.
-- [ ] Crear `src/engine/combat.py` para CA, ataques, daño e iniciativa.
-- [ ] Crear `src/engine/spellcasting.py` para slots, trucos, conjuros conocidos y preparados.
-- [ ] Crear `src/engine/factory.py` con `CharacterFactory`.
-- [ ] Crear `CreationContext` para llevar el estado paso a paso.
-- [ ] Implementar el flujo de creacion en este orden:
-  - [ ] seleccionar clase
-  - [ ] seleccionar trasfondo
-  - [ ] seleccionar especie
-  - [ ] asignar atributos
-  - [ ] elegir habilidades
-  - [ ] elegir equipo
-  - [ ] finalizar personaje
-- [ ] Calcular HP inicial, bono de competencia, CA, iniciativa, salvaciones, competencias y conjuros iniciales.
-- [ ] Escribir `scripts/test_creation.py` para generar personajes de ejemplo desde consola.
-- [ ] Escribir tests de nivel 1 en `tests/test_factory.py`.
+### Tareas
+
+- [ ] Crear `src/engine/validation.py`:
+  - `validate_skill_choices(class_slug, chosen_skills, repo) -> bool`
+  - `validate_asi_choices(background_slug, chosen_abilities, repo) -> bool`
+  - `validate_equipment_choice(class_slug, choice_index, repo) -> bool`
+  - `validate_feat_prerequisites(feat_slug, character, repo) -> bool`
+
+- [ ] Crear `src/engine/combat.py` (solo cálculos pasivos para la hoja):
+  - `calculate_ac(character: CharacterState, repo: GameDataRepository) -> int`
+  - `calculate_initiative(character: CharacterState) -> int`
+  - `calculate_weapon_attack(character, weapon_slug, repo) -> tuple[int, str]`
+    → devuelve (bono_total, cadena_daño) ej: `(+5, "1d8+3")`
+
+- [ ] Crear `src/engine/spellcasting.py`:
+  - `get_available_slots(class_slug, level, repo) -> dict[str, int]`
+  - `get_max_cantrips(class_slug, level, repo) -> int`
+  - `get_max_spells_known(class_slug, level, repo) -> int | None` (None si prepara)
+  - `filter_spells_for_class(class_slug, max_spell_level, repo) -> list[SpellData]`
+  - `calculate_spell_save_dc(character, repo) -> int`
+  - `calculate_spell_attack_bonus(character, repo) -> int`
+
+- [ ] Crear `src/engine/factory.py` con `CharacterFactory` y `CreationContext`:
+
+```python
+@dataclass
+class CreationContext:
+    class_slug: str | None = None
+    background_slug: str | None = None
+    species_slug: str | None = None
+    lineage_slug: str | None = None
+    base_ability_scores: dict[str, int] = field(default_factory=dict)
+    asi_choices: dict[str, int] = field(default_factory=dict)
+    chosen_skills: list[str] = field(default_factory=list)
+    equipment_choice_index: int | None = None
+    chosen_feats: list[str] = field(default_factory=list)
+    character_name: str = ""
+```
+
+- [ ] Implementar el flujo de creación en `CharacterFactory.build(ctx, repo)`:
+  1. Validar que `ctx` está completo.
+  2. Aplicar atributos base + ASI del trasfondo.
+  3. Calcular HP nivel 1: `hit_die + CON_mod`.
+  4. Recopilar competencias de clase + trasfondo + especie.
+  5. Aplicar dote de origen.
+  6. Calcular equipamiento inicial.
+  7. Calcular conjuros iniciales si la clase es lanzadora.
+  8. Devolver `CharacterState` completo.
+
+- [ ] Crear `scripts/test_creation.py`: genera 3 personajes de ejemplo desde consola y los imprime.
+- [ ] Tests `tests/test_factory.py`:
+  - Crear un Bardo Criminal Elfo con matriz estándar → verificar todos los valores.
+  - Crear un Guerrero Soldado Humano → verificar CA con cota de malla.
+  - Crear un Mago Erudito Gnomo → verificar DC de conjuro y conjuros conocidos.
 
 ### Resultado esperado
-Se puede generar un personaje de nivel 1 completamente funcional sin UI.
+Se puede generar un personaje nivel 1 completamente funcional sin abrir la UI.
 
 ---
 
-## Fase 4. Motor de subida de nivel
+## Fase 4 — Motor de subida de nivel
 
-### Objetivo
-Permitir progresion completa de nivel 1 a 20.
+**Objetivo:** Progresión completa de nivel 1 a 20 con todas las reglas.
 
-- [ ] Crear `src/engine/progression.py` con `LevelUpEngine`.
-- [ ] Crear `src/engine/retroactivity.py` para recalculo retroactivo de HP por CON.
-- [ ] Hacer que cada subida de nivel haga lo siguiente:
-  - [ ] sumar HP
-  - [ ] actualizar bono de competencia si corresponde
-  - [ ] activar seleccion de subclase en nivel 3
-  - [ ] activar seleccion de dote o ASI en niveles correspondientes
-  - [ ] actualizar espacios de conjuro
-  - [ ] permitir aprender o reemplazar conjuros
-  - [ ] actualizar rasgos de clase y subclase
-- [ ] Manejar el caso de CON que sube y recalcula HP retroactivo.
-- [ ] Escribir tests de progresion en `tests/test_progression.py`.
-- [ ] Escribir tests especificos de retroactividad en `tests/test_retroactivity.py`.
+### Tareas
 
-### Orden exacto de trabajo en esta fase
+- [ ] Crear `src/engine/progression.py` con `LevelUpEngine`:
 
-1. Crear `progression.py`.
-2. Crear `retroactivity.py`.
-3. Conectar con `character.py`.
-4. Conectar con `spellcasting.py`.
-5. Escribir tests.
+```python
+class LevelUpEngine:
+    def level_up(self, character: CharacterState, choices: LevelUpChoices, repo) -> CharacterState:
+        """Aplica una subida de nivel y devuelve el nuevo CharacterState."""
+```
+
+- [ ] `LevelUpChoices` debe contemplar:
+  - `hp_roll: int | None` → None = usar promedio fijo
+  - `subclass_slug: str | None` → requerido si nivel == 3
+  - `feat_slug: str | None` → si es nivel de ASI/Dote
+  - `asi_choices: dict[str, int] | None` → si elige ASI en lugar de dote
+  - `new_spells: list[str]` → slugs de conjuros aprendidos
+  - `replaced_spell: str | None` → slug del conjuro olvidado
+
+- [ ] Lógica de `level_up()`:
+  1. Incrementar `character.level`.
+  2. Calcular nuevo HP: `hp_roll_or_avg + CON_mod` y añadir al máximo.
+  3. Si nivel 3: aplicar subclase.
+  4. Si nivel es ASI/Dote: aplicar feat o ASI (y llamar retroactividad si sube CON).
+  5. Si nivel aumenta el bono de competencia: recalcular todas las competencias.
+  6. Actualizar slots de conjuro según la tabla de la clase.
+  7. Añadir conjuros aprendidos, eliminar el reemplazado si aplica.
+  8. Activar nuevos rasgos de clase y subclase para ese nivel.
+
+- [ ] Crear `src/engine/retroactivity.py`:
+  - `recalculate_hp_for_con_increase(character: CharacterState, old_con_mod: int, new_con_mod: int) -> int`
+  - Fórmula: `new_hp_max = old_hp_max + (new_con_mod - old_con_mod) * level`
+
+- [ ] Tests `tests/test_progression.py`:
+  - Subir un Bardo de nivel 1 a 20, verificar HP, PB y slots en cada paso.
+  - Verificar que nivel 3 activa la selección de subclase.
+  - Verificar que nivel 4, 8, 12, 16, 19 activan ASI/Dote.
+  - Guerrero: verificar ASI extra en niveles 6, 14.
+
+- [ ] Tests `tests/test_retroactivity.py`:
+  - Personaje nivel 5 CON 14 (+2) sube a CON 16 (+3) → HP debe subir en +5.
+  - Personaje nivel 10 sube CON en 2 puntos → HP sube en +10.
 
 ### Resultado esperado
-El personaje puede subir de nivel sin perder consistencia mecanica.
+El personaje puede subir de nivel sin perder consistencia mecánica.
 
 ---
 
-## Fase 5. Fundacion de la UI en PySide6
+## Fase 5 — Fundación de la UI en PySide6
 
-### Objetivo
-Arrancar una ventana funcional con estilo dark fantasy y pixel art nitido.
+**Objetivo:** Ventana funcional con estilo dark fantasy y pixel art nítido.
 
-- [ ] Crear `src/ui/app.py` con `QApplication`, `QMainWindow` y gestion basica de escenas.
-- [ ] Crear `src/ui/theme.py` con paleta oscura, fuentes y QSS.
-- [ ] Crear `src/ui/pixel_art.py` con utilidades para cargar y escalar pixmaps sin suavizado.
-- [ ] Crear `src/ui/navigation.py` para navegar entre pantallas.
-- [ ] Crear widgets base:
-  - [ ] `pixel_label.py`
-  - [ ] `pixel_button.py`
-  - [ ] `pixel_panel.py`
-  - [ ] `stat_widget.py`
-  - [ ] `skill_widget.py`
-  - [ ] `spell_widget.py`
-- [ ] Crear `src/ui/scenes/main_menu.py`.
-- [ ] Probar que la ventana abre, muestra menu principal y navega.
+### Tareas
+
+- [ ] Crear `src/ui/theme.py`:
+  - Paleta oscura: fondo `#0D0D0F`, superficie `#161618`, acento `#C8A96E` (dorado parchment).
+  - Texto primario `#E8DCC8`, texto secundario `#8A7A66`.
+  - Fuentes: pixel art para títulos, sans-serif para cuerpo.
+  - Función `apply_theme(app: QApplication) -> None` que carga el QSS completo.
+
+- [ ] Crear `src/ui/pixel_art.py`:
+  - `load_pixmap(path: str, scale: int) -> QPixmap` → siempre `Qt.FastTransformation`.
+  - `PixelPainter` context manager que desactiva `SmoothPixmapTransform`.
+  - Nunca usar `Qt.SmoothTransformation`.
+
+- [ ] Crear `src/ui/app.py`:
+  - `LirielApp(QMainWindow)` con barra de menú, área central y barra de estado.
+  - Conectar señal de cierre con guardado de sesión.
+
+- [ ] Crear `src/ui/navigation.py`:
+  - `SceneManager` que gestiona un `QStackedWidget` con escenas con nombre.
+  - `push_scene(name, scene)`, `go_to(name)`, `go_back()`.
+
+- [ ] Crear widgets base en `src/ui/widgets/`:
+  - `PixelButton`: botón con sprite de fondo y hover animado.
+  - `PixelLabel`: label con fuente pixel art configurable.
+  - `PixelPanel`: panel con borde decorativo y fondo semitransparente.
+  - `StatWidget`: muestra una característica (nombre + puntuación + modificador).
+  - `SkillWidget`: fila de habilidad con checkbox de competencia y valor.
+  - `SpellWidget`: fila de conjuro con nivel, nombre, escuela y botón de info.
+
+- [ ] Crear `src/ui/scenes/main_menu.py`:
+  - Botones: Nuevo Personaje, Cargar Personaje, Opciones, Salir.
+  - Logo de Liriel centrado con animación de fade-in.
+
+- [ ] Probar navegación: main_menu → (placeholder) → volver.
 
 ### Resultado esperado
-La aplicacion ya se ve como una app real y no como un prototipo vacio.
+La app ya se ve como una aplicación real, no un prototipo vacío.
 
 ---
 
-## Fase 6. Wizard de creacion GUI
+## Fase 6 — Wizard de creación (GUI)
 
-### Objetivo
-Crear personajes desde una interfaz guiada.
+**Objetivo:** Crear personajes nivel 1 desde una interfaz guiada, paso a paso.
 
-- [ ] Crear `src/ui/scenes/creation_wizard.py`.
-- [ ] Dividirlo en pasos claros:
-  - [ ] clase
-  - [ ] trasfondo
-  - [ ] especie
-  - [ ] atributos
-  - [ ] habilidades
-  - [ ] equipo
-  - [ ] resumen final
-- [ ] Conectar cada paso con `CharacterFactory`.
-- [ ] Bloquear opciones invalidas segun reglas.
-- [ ] Mostrar vista previa del personaje en cada paso.
-- [ ] Guardar el personaje al confirmar el resumen.
+### Tareas
+
+- [ ] Crear `src/ui/scenes/creation_wizard.py` como `QWizard` o secuencia de pantallas.
+- [ ] Implementar los 7 pasos con su pantalla dedicada:
+
+| Paso | Pantalla | Contenido |
+|---|---|---|
+| 1 | Clase | Lista de clases con descripción, dado de golpe, tipo de lanzador |
+| 2 | Trasfondo | Lista de trasfondos, muestra ASI disponibles y dote de origen |
+| 3 | Especie | Lista de especies, linajes opcionales, rasgos |
+| 4 | Atributos | Selector: Matriz Estándar / Compra de Puntos; asignación de los bonos del trasfondo |
+| 5 | Habilidades | Lista filtrada según clase + trasfondo; checkboxes hasta el límite |
+| 6 | Equipo | Opciones de equipo de clase + trasfondo; toggle para oro inicial |
+| 7 | Resumen | Vista previa de la hoja completa antes de confirmar |
+
+- [ ] Cada paso llama a `CharacterFactory` internamente; bloquea el "Siguiente" si la selección es inválida.
+- [ ] El resumen final muestra: HP, CA, iniciativa, salvaciones, habilidades, ataques, conjuros (si aplica).
+- [ ] Al confirmar, guarda el personaje con `file_io.save_character()` y navega a la hoja.
 
 ### Resultado esperado
-El usuario puede crear un personaje completo sin tocar consola.
+El usuario puede crear un personaje completo sin tocar la consola.
 
 ---
 
-## Fase 7. Hoja de personaje
+## Fase 7 — Hoja de personaje (GUI)
 
-### Objetivo
-Mostrar y editar la hoja completa de forma clara.
+**Objetivo:** Pantalla central que muestra y permite editar la hoja completa.
+
+### Tareas
 
 - [ ] Crear `src/ui/scenes/character_sheet.py`.
-- [ ] Mostrar cabecera, atributos, HP, CA, salvaciones, habilidades, equipo, rasgos y conjuros.
-- [ ] Hacer la hoja desplazable.
-- [ ] Conectar botones de guardar, subir de nivel y gestionar equipo.
-- [ ] Refrescar datos desde `CharacterState` cuando cambie algo.
+- [ ] La hoja se divide en secciones con scroll vertical:
+
+| Sección | Contenido |
+|---|---|
+| Cabecera | Nombre, clase/subclase, especie, trasfondo, nivel |
+| Características | 6 `StatWidget` con puntuación y modificador |
+| Combate pasivo | HP (actual/máximo), CA, Iniciativa, Velocidad, Bono de Competencia |
+| Salvaciones | 6 filas con modificador total |
+| Habilidades | 18 `SkillWidget` con pericia/experiencia marcada |
+| Rasgos | Lista de rasgos activos de clase, subclase, especie y dotes |
+| Conjuros | Tabla de slots disponibles/usados + lista de conjuros conocidos/preparados |
+| Equipo | Lista de inventario con peso total; botón de equipar/quitar |
+
+- [ ] Botón **Guardar** → `file_io.save_character()`.
+- [ ] Botón **Subir de Nivel** → navega a `level_up_scene`.
+- [ ] Botón **Gestionar Equipo** → navega a `inventory_scene`.
+- [ ] Todos los valores se leen de `CharacterState`; ningún valor se calcula en la UI.
+- [ ] Si el personaje cambia, emitir señal `character_updated` y refrescar todos los widgets.
 
 ### Resultado esperado
-La hoja funciona como pantalla central de la aplicacion.
+La hoja funciona como pantalla central de la aplicación.
 
 ---
 
-## Fase 8. Level Up GUI
+## Fase 8 — Level Up (GUI)
 
-### Objetivo
-Subir de nivel desde la interfaz con todas las decisiones.
+**Objetivo:** Subir de nivel desde la interfaz con todas las decisiones requeridas.
+
+### Tareas
 
 - [ ] Crear `src/ui/scenes/level_up_scene.py`.
-- [ ] Mostrar el aumento de HP.
-- [ ] Mostrar la subclase en nivel 3.
-- [ ] Mostrar la dote o ASI en niveles correctos.
-- [ ] Mostrar nuevos conjuros y reemplazos.
-- [ ] Integrar la retroactividad de CON con preview antes de confirmar.
+- [ ] Construir el flujo de decisiones según el nivel destino:
+
+| Decisión | Cuándo aparece |
+|---|---|
+| HP: tirar dado vs promedio | Siempre |
+| Seleccionar subclase | Solo cuando nivel destino == 3 |
+| Seleccionar Dote o ASI | Niveles ASI de la clase (4, 8, 12, 16, 19 para mayoría) |
+| Aprender conjuros nuevos | Si la clase es lanzadora |
+| Reemplazar un conjuro | Si la clase permite sustitución |
+
+- [ ] Vista de preview antes de confirmar: muestra el antes/después de HP, PB, slots, atributos.
+- [ ] Al confirmar, llama `LevelUpEngine.level_up()` → actualiza `CharacterState` → guarda → vuelve a la hoja.
+- [ ] Si el ASI aumenta CON: mostrar aviso de retroactividad con preview del nuevo HP máximo.
 
 ### Resultado esperado
-El level up de la UI replica la logica del motor.
+El level up en la UI replica exactamente la lógica del motor.
 
 ---
 
-## Fase 9. Inventario y equipo
+## Fase 9 — Inventario y equipo (GUI)
 
-### Objetivo
-Gestionar equipo y su impacto mecanico.
+**Objetivo:** Gestionar equipo y ver su impacto mecánico en la hoja.
+
+### Tareas
 
 - [ ] Crear `src/ui/scenes/inventory_scene.py`.
-- [ ] Permitir equipar, quitar y comparar objetos.
-- [ ] Recalcular CA, ataques y carga al cambiar equipo.
+- [ ] Panel izquierdo: inventario actual con peso total y capacidad (FUE × 15 libras).
+- [ ] Panel derecho: catálogo de equipo del repositorio con búsqueda y filtro por categoría.
+- [ ] Acciones disponibles:
+  - Equipar armadura → recalcula CA → refresca hoja.
+  - Equipar/quitar escudo → recalcula CA.
+  - Añadir/quitar armas del inventario → recalcula ataques visibles en la hoja.
+  - Añadir objetos genéricos (herramientas, consumibles).
+- [ ] Ningún cálculo de CA o ataque se hace en la escena; todo pasa por `combat.py`.
 
 ### Resultado esperado
-El equipo impacta de forma visible en la hoja.
+El equipo impacta de forma visible e inmediata en la hoja.
 
 ---
 
-## Fase 10. Assets y pulido visual
+## Fase 10 — Assets y pulido visual
 
-### Objetivo
-Dar identidad artistica a la app.
+**Objetivo:** Dar identidad artística coherente a la app.
 
-- [ ] Crear sprites de UI en Aseprite.
-- [ ] Crear iconos de clases, stats, habilidades y conjuros.
-- [ ] Crear fuentes pixel-art legibles.
-- [ ] Crear paneles y botones con estilo dark fantasy.
-- [ ] Ajustar escalado para que no haya interpolacion.
+### Recursos a crear (Aseprite)
+
+- [ ] Iconos de clase (12 iconos, 32×32 px).
+- [ ] Iconos de habilidad (18 iconos, 16×16 px).
+- [ ] Iconos de escuela de magia (8 iconos, 16×16 px).
+- [ ] Sprites de UI: botones, paneles, bordes decorativos, scroll.
+- [ ] Fondo de pantalla para main menu (dark fantasy, estático o animado en loop).
+- [ ] Fuente pixel art personalizada (o selección de fuente libre estilo fantasy).
+
+### Pulido de UI
+
+- [ ] Animaciones de hover en botones (escala ligera o brillo).
+- [ ] Transición de fade entre escenas (150ms).
+- [ ] Tooltips en todos los rasgos, habilidades y conjuros.
+- [ ] Scroll suave en la hoja de personaje.
+- [ ] Soporte de teclado: Tab entre campos, Enter para confirmar.
 
 ### Resultado esperado
-La app tiene coherencia visual y pixel art nitido.
+La app tiene coherencia visual y pixel art nítido sin interpolación.
 
 ---
 
-## Fase 11. QA y empaquetado
+## Fase 11 — QA y empaquetado
 
-### Objetivo
-Dejar una version distribuible.
+**Objetivo:** Versión distribuible y estable.
 
-- [ ] Crear tests de integracion completos.
-- [ ] Probar crear, guardar, cargar y subir personajes hasta nivel 20.
-- [ ] Verificar clases magicas y no magicas.
-- [ ] Empaquetar con PyInstaller.
-- [ ] Probar el ejecutable en una maquina limpia.
+### Tests de integración
+
+- [ ] Crear personaje completo de cada clase → guardar → cargar → verificar valores idénticos.
+- [ ] Subir cada clase de nivel 1 a 20 → verificar HP, PB, slots, rasgos en cada paso.
+- [ ] Verificar retroactividad CON en nivel 4 para cada clase.
+- [ ] Probar clases no lanzadoras (Guerrero, Bárbaro): sin sección de conjuros.
+- [ ] Probar clases half-caster (Paladín, Explorador): slots reducidos.
+- [ ] Probar Brujo: slots cortos (`short rest`), máximo nivel 5.
+
+### Empaquetado
+
+- [ ] Probar `pyinstaller main.py --onefile --windowed --name Liriel`.
+- [ ] Verificar que los JSON de `data/` se empaquetan con `--add-data`.
+- [ ] Verificar que los assets se empaquetan.
+- [ ] Probar el ejecutable en una máquina Windows sin Python instalado.
 
 ### Resultado esperado
-Version utilizable para terceros.
+Versión 1.0 utilizable por terceros como ejecutable independiente.
 
 ---
 
-## Renderizado pixel art en PySide6
+## Apéndice — Renderizado pixel art en PySide6
 
-Usar siempre `Qt.FastTransformation` al escalar:
+**Regla absoluta:** nunca usar `Qt.SmoothTransformation`.
 
 ```python
-pixmap = pixmap.scaled(w, h, Qt.KeepAspectRatio, Qt.FastTransformation)
+# Al cargar un pixmap y escalarlo
+pixmap = QPixmap(path).scaled(w, h, Qt.KeepAspectRatio, Qt.FastTransformation)
+
+# En cualquier paintEvent personalizado
+def paintEvent(self, event):
+    painter = QPainter(self)
+    painter.setRenderHint(QPainter.SmoothPixmapTransform, False)
+    painter.drawPixmap(rect, self.pixmap)
 ```
 
-En `paintEvent`:
-
-```python
-painter.setRenderHint(QPainter.SmoothPixmapTransform, False)
-```
-
-No usar `Qt.SmoothTransformation`.
+**Por qué:** `SmoothTransformation` difumina los píxeles del sprite art, destruyendo la estética.
+`FastTransformation` = escalado por vecino más cercano = píxeles nítidos.
 
 ---
 
-## Orden recomendado real de implementacion
+## Apéndice — Fórmulas de D&D 5.5e implementadas por el motor
 
-1. `enums.py`
-2. `models.py`
-3. `loader.py`
-4. `repository.py`
-5. JSON minimos funcionales
-6. `character.py`
-7. `combat.py`
-8. `spellcasting.py`
-9. `factory.py`
-10. `progression.py`
-11. `retroactivity.py`
-12. `file_io.py`
-13. `pixel_art.py`
-14. `app.py`
-15. `main_menu.py`
-16. `creation_wizard.py`
-17. `character_sheet.py`
-18. `level_up_scene.py`
-19. `inventory_scene.py`
-20. assets finales
-21. tests de integracion
-22. empaquetado
+| Valor | Fórmula |
+|---|---|
+| Modificador de característica | `⌊(puntuación − 10) / 2⌋` |
+| Bono de competencia | Niveles 1-4: +2 / 5-8: +3 / 9-12: +4 / 13-16: +5 / 17-20: +6 |
+| HP nivel 1 | `hit_die + CON_mod` |
+| HP niveles 2+ | `HP_prev + ⌊hit_die/2⌋ + 1 + CON_mod` (promedio) ó `roll + CON_mod` |
+| HP retroactivo por CON | `HP_max += (new_CON_mod − old_CON_mod) × level` |
+| CA sin armadura | `10 + DEX_mod` |
+| CA armadura ligera | `base_ac + DEX_mod` |
+| CA armadura media | `base_ac + min(DEX_mod, 2)` |
+| CA armadura pesada | `base_ac` |
+| Escudo | `+2 a cualquier CA` |
+| Iniciativa | `DEX_mod` |
+| Salvación competente | `ability_mod + PB` |
+| Salvación sin competencia | `ability_mod` |
+| Tirada de ataque de conjuro | `ability_mod_lanzador + PB` |
+| CD de salvación de conjuro | `8 + ability_mod_lanzador + PB` |
+| Bono de ataque cuerpo a cuerpo | `STR_mod + PB` (o `DEX_mod + PB` si finesse) |
+| Bono de ataque a distancia | `DEX_mod + PB` |
+| Daño cuerpo a cuerpo | `dado_arma + STR_mod` (o `DEX_mod` si finesse) |
+| Daño a distancia | `dado_arma + DEX_mod` |
