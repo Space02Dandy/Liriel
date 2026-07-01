@@ -1,0 +1,26 @@
+{
+  "slug": "champion",
+  "class_slug": "fighter",
+  "name": "Champion",
+  "description": "Aspires to physical excellence in combat.",
+  "features_by_level": {
+    "3": [
+      "Remarkable Athlete",
+      "Improved Critical"
+    ],
+    "7": [
+      "Additional Fighting Style"
+    ],
+    "10": [
+      "Heroic Warrior"
+    ],
+    "15": [
+      "Superior Critical"
+    ],
+    "18": [
+      "Survivor"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

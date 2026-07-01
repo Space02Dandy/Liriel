@@ -1,0 +1,24 @@
+{
+  "slug": "circle_of_the_stars",
+  "class_slug": "druid",
+  "name": "Circle of the Stars",
+  "description": "Calls upon the power of stellar magic.",
+  "features_by_level": {
+    "3": [
+      "Star Map",
+      "Starry Form",
+      "Guiding Bolt"
+    ],
+    "6": [
+      "Cosmic Omen"
+    ],
+    "10": [
+      "Twinkling Constellations"
+    ],
+    "14": [
+      "Full of Stars"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

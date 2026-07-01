@@ -1,0 +1,23 @@
+{
+  "slug": "evoker",
+  "class_slug": "wizard",
+  "name": "Evoker",
+  "description": "Creates explosive elemental effects with evocation magic.",
+  "features_by_level": {
+    "3": [
+      "Evocation Savant",
+      "Potent Cantrip"
+    ],
+    "6": [
+      "Sculpt Spells"
+    ],
+    "10": [
+      "Empowered Evocation"
+    ],
+    "14": [
+      "Overchannel"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

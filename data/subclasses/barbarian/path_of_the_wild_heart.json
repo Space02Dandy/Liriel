@@ -1,0 +1,23 @@
+{
+  "slug": "path_of_the_wild_heart",
+  "class_slug": "barbarian",
+  "name": "Path of the Wild Heart",
+  "description": "Walks in communion with the animal world.",
+  "features_by_level": {
+    "3": [
+      "Rage of the Wilds",
+      "Animal Speaker"
+    ],
+    "6": [
+      "Aspect of the Wilds"
+    ],
+    "10": [
+      "Nature Speaker"
+    ],
+    "14": [
+      "Power of the Wilds"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

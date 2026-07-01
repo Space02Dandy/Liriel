@@ -1,0 +1,26 @@
+{
+  "slug": "battle_master",
+  "class_slug": "fighter",
+  "name": "Battle Master",
+  "description": "Masters advanced combat maneuvers with superiority dice.",
+  "features_by_level": {
+    "3": [
+      "Student of War",
+      "Combat Superiority"
+    ],
+    "7": [
+      "Know Your Enemy"
+    ],
+    "10": [
+      "Improved Combat Superiority"
+    ],
+    "15": [
+      "Relentless"
+    ],
+    "18": [
+      "Ultimate Combat Superiority"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

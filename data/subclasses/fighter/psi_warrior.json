@@ -1,0 +1,25 @@
+{
+  "slug": "psi_warrior",
+  "class_slug": "fighter",
+  "name": "Psi Warrior",
+  "description": "Augments your physical prowess with psionic power.",
+  "features_by_level": {
+    "3": [
+      "Psionic Power"
+    ],
+    "7": [
+      "Telekinetic Adept"
+    ],
+    "10": [
+      "Guarded Mind"
+    ],
+    "15": [
+      "Bulwark of Force"
+    ],
+    "18": [
+      "Telekinetic Master"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

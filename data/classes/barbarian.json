@@ -1,0 +1,141 @@
+{
+  "slug": "barbarian",
+  "name": "Barbarian",
+  "hit_die": 12,
+  "primary_ability": "STR",
+  "saving_throws": [
+    "STR",
+    "CON"
+  ],
+  "armor_proficiencies": [
+    "light",
+    "medium",
+    "shield"
+  ],
+  "weapon_proficiencies": [
+    "simple",
+    "martial"
+  ],
+  "tool_proficiencies": [],
+  "skill_choices": {
+    "count": 2,
+    "from": [
+      "Animal_Handling",
+      "Athletics",
+      "Intimidation",
+      "Nature",
+      "Perception",
+      "Survival"
+    ]
+  },
+  "spellcasting": null,
+  "features_by_level": {
+    "1": [
+      "rage",
+      "unarmored_defense",
+      "weapon_mastery"
+    ],
+    "2": [
+      "danger_sense",
+      "reckless_attack"
+    ],
+    "3": [
+      "subclass_choice",
+      "primal_knowledge"
+    ],
+    "4": [
+      "asi"
+    ],
+    "5": [
+      "extra_attack",
+      "fast_movement"
+    ],
+    "6": [
+      "subclass_feature"
+    ],
+    "7": [
+      "feral_instinct",
+      "instinctive_pounce"
+    ],
+    "8": [
+      "asi"
+    ],
+    "9": [
+      "brutal_strike"
+    ],
+    "10": [
+      "subclass_feature"
+    ],
+    "11": [
+      "relentless_rage"
+    ],
+    "12": [
+      "asi"
+    ],
+    "13": [
+      "improved_brutal_strike_1"
+    ],
+    "14": [
+      "subclass_feature"
+    ],
+    "15": [
+      "persistent_rage"
+    ],
+    "16": [
+      "asi"
+    ],
+    "17": [
+      "improved_brutal_strike_2"
+    ],
+    "18": [
+      "indomitable_might"
+    ],
+    "19": [
+      "asi"
+    ],
+    "20": [
+      "primal_champion"
+    ]
+  },
+  "subclass_level": 3,
+  "subclasses": [
+    "path_world_tree",
+    "path_berserker",
+    "path_wild_heart",
+    "path_zealot"
+  ],
+  "equipment_choices": [
+    [
+      {
+        "slug": "greataxe",
+        "qty": 1
+      },
+      {
+        "slug": "handaxe",
+        "qty": 4
+      },
+      {
+        "slug": "explorer_pack",
+        "qty": 1
+      },
+      {
+        "slug": "gp",
+        "qty": 15
+      }
+    ]
+  ],
+  "starting_gold": 75,
+  "asi_levels": [
+    4,
+    8,
+    12,
+    16,
+    19
+  ],
+  "multiclass_requirements": [
+    {
+      "ability": "STR",
+      "min_score": 13
+    }
+  ]
+}

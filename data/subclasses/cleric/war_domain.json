@@ -1,0 +1,73 @@
+{
+  "slug": "war_domain",
+  "class_slug": "cleric",
+  "name": "War Domain",
+  "description": "Inspires courage and punishes enemies with the magic of war.",
+  "features_by_level": {
+    "3": [
+      "War Domain Spells",
+      "Guided Strike",
+      "War Priest"
+    ],
+    "6": [
+      "War God's Blessing"
+    ],
+    "17": [
+      "Avatar of Battle"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "spiritual_weapon",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "magic_weapon",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "shield_of_faith",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "guiding_bolt",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "spirit_guardians",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "crusaders_mantle",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "fire_shield",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "freedom_of_movement",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "steel_wind_strike",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "hold_monster",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": [
+    "spiritual_weapon",
+    "magic_weapon",
+    "shield_of_faith",
+    "guiding_bolt",
+    "spirit_guardians",
+    "crusaders_mantle",
+    "fire_shield",
+    "freedom_of_movement",
+    "steel_wind_strike",
+    "hold_monster"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "slug": "life_domain",
+  "class_slug": "cleric",
+  "name": "Life Domain",
+  "description": "Eases the world's suffering through positive energy and healing.",
+  "features_by_level": {
+    "3": [
+      "Life Domain Spells",
+      "Disciple of Life",
+      "Preserve Life"
+    ],
+    "6": [
+      "Blessed Healer"
+    ],
+    "17": [
+      "Supreme Healing"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "aid",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "bless",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "cure_wounds",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "lesser_restoration",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "mass_healing_word",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "revivify",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "aura_of_life",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "death_ward",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "mass_cure_wounds",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "greater_restoration",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": [
+    "aid",
+    "bless",
+    "cure_wounds",
+    "lesser_restoration",
+    "mass_healing_word",
+    "revivify",
+    "aura_of_life",
+    "death_ward",
+    "mass_cure_wounds",
+    "greater_restoration"
+  ]
+}

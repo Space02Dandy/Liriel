@@ -1,0 +1,23 @@
+{
+  "slug": "abjurer",
+  "class_slug": "wizard",
+  "name": "Abjurer",
+  "description": "Protects your allies and banishes your enemies with abjuration magic.",
+  "features_by_level": {
+    "3": [
+      "Abjuration Savant",
+      "Arcane Ward"
+    ],
+    "6": [
+      "Projected Ward"
+    ],
+    "10": [
+      "Spell Breaker"
+    ],
+    "14": [
+      "Spell Resistance"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

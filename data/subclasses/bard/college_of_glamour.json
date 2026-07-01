@@ -1,0 +1,37 @@
+{
+  "slug": "college_of_glamour",
+  "class_slug": "bard",
+  "name": "College of Glamour",
+  "description": "Weaves the beguiling magic of the fey.",
+  "features_by_level": {
+    "3": [
+      "Beguiling Magic",
+      "Mantle of Inspiration"
+    ],
+    "6": [
+      "Mantle of Majesty"
+    ],
+    "14": [
+      "Unbreakable Majesty"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "charm_person",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "mirror_image",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "command",
+      "class_level": 6
+    }
+  ],
+  "spell_locks": [
+    "charm_person",
+    "mirror_image",
+    "command"
+  ]
+}

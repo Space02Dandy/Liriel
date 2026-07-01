@@ -1,0 +1,23 @@
+{
+  "slug": "diviner",
+  "class_slug": "wizard",
+  "name": "Diviner",
+  "description": "Unravels the secrets of the multiverse through divination.",
+  "features_by_level": {
+    "3": [
+      "Divination Savant",
+      "Portent"
+    ],
+    "6": [
+      "Expert Divination"
+    ],
+    "10": [
+      "The Third Eye"
+    ],
+    "14": [
+      "Greater Portent"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

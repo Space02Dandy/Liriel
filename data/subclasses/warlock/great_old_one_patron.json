@@ -1,0 +1,58 @@
+{
+  "slug": "great_old_one_patron",
+  "class_slug": "warlock",
+  "name": "Great Old One Patron",
+  "description": "Your patron is an entity from the Far Realm.",
+  "features_by_level": {
+    "3": [
+      "Great Old One Spells",
+      "Awakened Mind",
+      "Psychic Spells"
+    ],
+    "6": [
+      "Clairvoyant Combatant"
+    ],
+    "10": [
+      "Eldritch Hex",
+      "Thought Shield"
+    ],
+    "14": [
+      "Create Thrall"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "detect_thoughts",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "mind_spike",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "mind_spike",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "evards_black_tentacles",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "hunger_of_hadar",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "summon_aberration",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "rarys_telepathic_bond",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "telekinesis",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": []
+}

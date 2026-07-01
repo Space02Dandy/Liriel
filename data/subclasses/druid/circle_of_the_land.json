@@ -1,0 +1,23 @@
+{
+  "slug": "circle_of_the_land",
+  "class_slug": "druid",
+  "name": "Circle of the Land",
+  "description": "Tunes into a specific geographic region to gain domain spells.",
+  "features_by_level": {
+    "3": [
+      "Circle of the Land Spells",
+      "Land's Aid"
+    ],
+    "6": [
+      "Natural Recovery"
+    ],
+    "10": [
+      "Nature's Ward"
+    ],
+    "14": [
+      "Nature's Sanctuary"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

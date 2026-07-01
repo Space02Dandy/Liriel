@@ -1,0 +1,22 @@
+{
+  "slug": "way_of_the_open_hand",
+  "class_slug": "monk",
+  "name": "Warrior of the Open Hand",
+  "description": "Masters unarmed combat techniques.",
+  "features_by_level": {
+    "3": [
+      "Open Hand Technique"
+    ],
+    "6": [
+      "Wholeness of Body"
+    ],
+    "11": [
+      "Fleet Step"
+    ],
+    "17": [
+      "Quivering Palm"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

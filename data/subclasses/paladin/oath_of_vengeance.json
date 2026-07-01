@@ -1,0 +1,75 @@
+{
+  "slug": "oath_of_vengeance",
+  "class_slug": "paladin",
+  "name": "Oath of Vengeance",
+  "description": "Punishes evildoers at all costs.",
+  "features_by_level": {
+    "3": [
+      "Oath of Vengeance Spells",
+      "Vow of Enmity"
+    ],
+    "7": [
+      "Relentless Avenger"
+    ],
+    "15": [
+      "Soul of Vengeance"
+    ],
+    "20": [
+      "Avenging Angel"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "hunters_mark",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "bane",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "hold_person",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "misty_step",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "haste",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "protection_from_energy",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "banishment",
+      "class_level": 13
+    },
+    {
+      "spell_slug": "dimension_door",
+      "class_level": 13
+    },
+    {
+      "spell_slug": "scrying",
+      "class_level": 17
+    },
+    {
+      "spell_slug": "hold_monster",
+      "class_level": 17
+    }
+  ],
+  "spell_locks": [
+    "hunters_mark",
+    "bane",
+    "hold_person",
+    "misty_step",
+    "haste",
+    "protection_from_energy",
+    "banishment",
+    "dimension_door",
+    "scrying",
+    "hold_monster"
+  ]
+}

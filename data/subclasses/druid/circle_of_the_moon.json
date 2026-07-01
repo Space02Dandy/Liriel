@@ -1,0 +1,45 @@
+{
+  "slug": "circle_of_the_moon",
+  "class_slug": "druid",
+  "name": "Circle of the Moon",
+  "description": "Protects creatures with the wildest beast forms.",
+  "features_by_level": {
+    "3": [
+      "Circle Forms",
+      "Circle of the Moon Spells"
+    ],
+    "6": [
+      "Improved Circle Forms"
+    ],
+    "10": [
+      "Moonlight Step"
+    ],
+    "14": [
+      "Lunar Form"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "summon_beast",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "summon_fey",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "summon_elemental",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "summon_celestial",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": [
+    "summon_beast",
+    "summon_fey",
+    "summon_elemental",
+    "summon_celestial"
+  ]
+}

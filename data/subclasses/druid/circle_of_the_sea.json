@@ -1,0 +1,63 @@
+{
+  "slug": "circle_of_the_sea",
+  "class_slug": "druid",
+  "name": "Circle of the Sea",
+  "description": "Channels the powers of the sea and storms.",
+  "features_by_level": {
+    "3": [
+      "Circle of the Sea Spells",
+      "Wrath of the Sea"
+    ],
+    "6": [
+      "Aquatic Affinity"
+    ],
+    "10": [
+      "Stormborn"
+    ],
+    "14": [
+      "Oceanic Gift"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "darkness",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "thunderwave",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "gust_of_wind",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "gust_of_wind",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "call_lightning",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "wall_of_water",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "control_water",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "summon_elemental",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": [
+    "darkness",
+    "thunderwave",
+    "gust_of_wind",
+    "wall_of_water",
+    "control_water",
+    "summon_elemental"
+  ]
+}

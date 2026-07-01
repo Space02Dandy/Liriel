@@ -1,0 +1,22 @@
+{
+  "slug": "beast_master",
+  "class_slug": "ranger",
+  "name": "Beast Master",
+  "description": "Forges bonds with a primal beast.",
+  "features_by_level": {
+    "3": [
+      "Primal Companion"
+    ],
+    "7": [
+      "Exceptional Training"
+    ],
+    "11": [
+      "Bestial Fury"
+    ],
+    "15": [
+      "Share Spells"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

@@ -1,0 +1,143 @@
+{
+  "slug": "monk",
+  "name": "Monk",
+  "hit_die": 8,
+  "primary_ability": "DEX",
+  "saving_throws": [
+    "STR",
+    "DEX"
+  ],
+  "armor_proficiencies": [],
+  "weapon_proficiencies": [
+    "simple",
+    "shortsword"
+  ],
+  "tool_proficiencies": [
+    "artisan_tools:1"
+  ],
+  "skill_choices": {
+    "count": 2,
+    "from": [
+      "Acrobatics",
+      "Athletics",
+      "History",
+      "Insight",
+      "Religion",
+      "Stealth"
+    ]
+  },
+  "spellcasting": null,
+  "features_by_level": {
+    "1": [
+      "martial_arts",
+      "unarmored_defense",
+      "weapon_mastery"
+    ],
+    "2": [
+      "monks_focus",
+      "unarmored_movement",
+      "uncanny_metabolism"
+    ],
+    "3": [
+      "deflect_attacks",
+      "subclass_choice"
+    ],
+    "4": [
+      "asi",
+      "slow_fall"
+    ],
+    "5": [
+      "extra_attack",
+      "stunning_strike"
+    ],
+    "6": [
+      "empowered_strikes",
+      "subclass_feature"
+    ],
+    "7": [
+      "evasion"
+    ],
+    "8": [
+      "asi"
+    ],
+    "9": [
+      "acrobatic_movement"
+    ],
+    "10": [
+      "self_restoration"
+    ],
+    "11": [
+      "subclass_feature"
+    ],
+    "12": [
+      "asi"
+    ],
+    "13": [
+      "deflect_energy"
+    ],
+    "14": [
+      "disciplined_survivor"
+    ],
+    "15": [
+      "perfect_focus"
+    ],
+    "16": [
+      "asi"
+    ],
+    "17": [
+      "subclass_feature"
+    ],
+    "18": [
+      "superior_defense"
+    ],
+    "19": [
+      "asi"
+    ],
+    "20": [
+      "body_and_mind"
+    ]
+  },
+  "subclass_level": 3,
+  "subclasses": [
+    "warrior_elements",
+    "warrior_mercy",
+    "warrior_open_hand",
+    "warrior_shadow"
+  ],
+  "equipment_choices": [
+    [
+      {
+        "slug": "shortsword",
+        "qty": 1
+      },
+      {
+        "slug": "dungeoneer_pack",
+        "qty": 1
+      },
+      {
+        "slug": "gp",
+        "qty": 11
+      }
+    ]
+  ],
+  "starting_gold": 50,
+  "asi_levels": [
+    4,
+    8,
+    12,
+    16,
+    19
+  ],
+  "multiclass_requirements": [
+    {
+      "ability": "DEX",
+      "min_score": 13,
+      "operator": "AND"
+    },
+    {
+      "ability": "WIS",
+      "min_score": 13,
+      "operator": "AND"
+    }
+  ]
+}

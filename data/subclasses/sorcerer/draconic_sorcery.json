@@ -1,0 +1,75 @@
+{
+  "slug": "draconic_sorcery",
+  "class_slug": "sorcerer",
+  "name": "Draconic Sorcery",
+  "description": "Exhales the magic of dragons.",
+  "features_by_level": {
+    "3": [
+      "Draconic Resilience",
+      "Draconic Spells"
+    ],
+    "6": [
+      "Elemental Affinity"
+    ],
+    "14": [
+      "Dragon Wings"
+    ],
+    "18": [
+      "Dragon Companion"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "dragons_breath",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "alter_self",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "chromatic_orb",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "command",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "fear",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "fly",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "hold_monster",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "arcane_eye",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "legend_lore",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "summon_dragon",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": [
+    "dragons_breath",
+    "alter_self",
+    "chromatic_orb",
+    "command",
+    "fear",
+    "fly",
+    "hold_monster",
+    "arcane_eye",
+    "legend_lore",
+    "summon_dragon"
+  ]
+}

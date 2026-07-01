@@ -1,0 +1,22 @@
+{
+  "slug": "path_of_the_world_tree",
+  "class_slug": "barbarian",
+  "name": "Path of the World Tree",
+  "description": "Connects with the cosmic tree Yggdrasil to gain vitality and dimensional mobility.",
+  "features_by_level": {
+    "3": [
+      "Vitality of the Tree"
+    ],
+    "6": [
+      "Branches of the Tree"
+    ],
+    "10": [
+      "Battering Roots"
+    ],
+    "14": [
+      "Travel Along the Tree"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

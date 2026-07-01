@@ -1,0 +1,293 @@
+{
+  "slug": "druid",
+  "name": "Druid",
+  "hit_die": 8,
+  "primary_ability": "WIS",
+  "saving_throws": [
+    "INT",
+    "WIS"
+  ],
+  "armor_proficiencies": [
+    "light",
+    "medium",
+    "shield"
+  ],
+  "weapon_proficiencies": [
+    "simple"
+  ],
+  "tool_proficiencies": [
+    "herbalism_kit"
+  ],
+  "skill_choices": {
+    "count": 2,
+    "from": [
+      "Arcana",
+      "Animal_Handling",
+      "Insight",
+      "Medicine",
+      "Nature",
+      "Perception",
+      "Religion",
+      "Survival"
+    ]
+  },
+  "spellcasting": {
+    "ability": "WIS",
+    "preparation": "prepared",
+    "caster_type": "full",
+    "cantrips_known": {
+      "1": 2,
+      "4": 3,
+      "10": 4
+    },
+    "spells_known": null,
+    "slots": {
+      "1": {
+        "1": 2
+      },
+      "2": {
+        "1": 3
+      },
+      "3": {
+        "1": 4,
+        "2": 2
+      },
+      "4": {
+        "1": 4,
+        "2": 3
+      },
+      "5": {
+        "1": 4,
+        "2": 3,
+        "3": 2
+      },
+      "6": {
+        "1": 4,
+        "2": 3,
+        "3": 3
+      },
+      "7": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 1
+      },
+      "8": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 2
+      },
+      "9": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 1
+      },
+      "10": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2
+      },
+      "11": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1
+      },
+      "12": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1
+      },
+      "13": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1,
+        "7": 1
+      },
+      "14": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1,
+        "7": 1
+      },
+      "15": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1,
+        "7": 1,
+        "8": 1
+      },
+      "16": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1,
+        "7": 1,
+        "8": 1
+      },
+      "17": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1
+      },
+      "18": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1
+      },
+      "19": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 2,
+        "7": 1,
+        "8": 1,
+        "9": 1
+      },
+      "20": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 2,
+        "7": 2,
+        "8": 1,
+        "9": 1
+      }
+    }
+  },
+  "features_by_level": {
+    "1": [
+      "druidic",
+      "primal_order",
+      "spellcasting"
+    ],
+    "2": [
+      "wild_companion",
+      "wild_shape"
+    ],
+    "3": [
+      "subclass_choice"
+    ],
+    "4": [
+      "asi",
+      "wild_shape_improvement"
+    ],
+    "5": [],
+    "6": [
+      "subclass_feature"
+    ],
+    "7": [],
+    "8": [
+      "asi",
+      "wild_shape_improvement"
+    ],
+    "9": [],
+    "10": [
+      "subclass_feature"
+    ],
+    "11": [],
+    "12": [
+      "asi"
+    ],
+    "13": [],
+    "14": [
+      "subclass_feature"
+    ],
+    "15": [],
+    "16": [
+      "asi"
+    ],
+    "17": [],
+    "18": [
+      "beast_spells"
+    ],
+    "19": [
+      "asi"
+    ],
+    "20": [
+      "archdruid"
+    ]
+  },
+  "subclass_level": 3,
+  "subclasses": [
+    "circle_land",
+    "circle_moon",
+    "circle_sea",
+    "circle_stars"
+  ],
+  "equipment_choices": [
+    [
+      {
+        "slug": "leather_armor",
+        "qty": 1
+      },
+      {
+        "slug": "shield",
+        "qty": 1
+      },
+      {
+        "slug": "druidic_focus",
+        "qty": 1
+      },
+      {
+        "slug": "explorer_pack",
+        "qty": 1
+      },
+      {
+        "slug": "gp",
+        "qty": 9
+      }
+    ]
+  ],
+  "starting_gold": 50,
+  "asi_levels": [
+    4,
+    8,
+    12,
+    16,
+    19
+  ],
+  "multiclass_requirements": [
+    {
+      "ability": "WIS",
+      "min_score": 13
+    }
+  ]
+}

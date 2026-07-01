@@ -17,8 +17,28 @@ El motor Python lee estos archivos al arrancar, los valida y los expone a travé
 
 ```
 data/
-├── classes.json        # Clases base (Bardo, Clérigo, Mago…)
-├── subclasses.json     # Subclases por clase
+├── classes/                    # Un archivo .json por clase base
+│   ├── barbarian.json
+│   ├── bard.json
+│   ├── cleric.json
+│   ├── druid.json
+│   ├── fighter.json
+│   ├── monk.json
+│   ├── paladin.json
+│   ├── ranger.json
+│   ├── rogue.json
+│   ├── sorcerer.json
+│   ├── warlock.json
+│   └── wizard.json
+├── subclasses/                 # Subdirectorio por clase, un .json por subclase
+│   ├── barbarian/
+│   │   ├── senda_del_arbol_del_mundo.json
+│   │   ├── senda_del_berserker.json
+│   │   ├── senda_del_corazon_salvaje.json
+│   │   └── senda_del_fanatico.json
+│   ├── bard/  (…4 archivos)
+│   ├── cleric/ (…4 archivos)
+│   └── …  (12 carpetas en total, 4 subclases c/u = 48 archivos)
 ├── species.json        # Especies (Elfo, Humano, Tiefling…)
 ├── backgrounds.json    # Trasfondos (Criminal, Erudito…)
 ├── feats.json          # Dotes (origen, generales, épicas)
@@ -44,15 +64,21 @@ data/
 
 El repositorio debe cargar en este orden para resolver referencias:
 
-1. `classes.json`
-2. `subclasses.json`  ← referencia `class_slug`
+1. `data/classes/*.json`        — cargado con `Path.glob("*.json")`, un objeto por archivo
+2. `data/subclasses/**/*.json`  — cargado con `Path.rglob("*.json")`, referencia `class_slug`
 3. `species.json`
-4. `backgrounds.json` ← referencia `origin_feat_slug`
-5. `feats.json`       ← debe estar antes que backgrounds en validación
+4. `backgrounds.json`           ← referencia `origin_feat_slug`
+5. `feats.json`                 ← debe estar antes que backgrounds en validación
 6. `weapons.json`
 7. `armor.json`
 8. `equipment.json`
-9. `spells.json`      ← referencia `classes` y `subclasses`
+9. `spells.json`                ← referencia `classes` y `subclasses`
+
+> **Estrategia del loader:** `load_classes()` itera `data/classes/*.json`; cada archivo
+> debe contener un único objeto `{}`. `load_subclasses()` usa `rglob("*.json")` para
+> recorrer recursivamente todos los subdirectorios de `data/subclasses/`. Ante cualquier
+> error de sintaxis o de esquema, el loader lanza `DataIntegrityError` indicando la ruta
+> exacta del archivo problemático y aborta el arranque.
 
 ---
 
@@ -80,6 +106,7 @@ Cada entrada describe una clase base completa.
 | `equipment_choices` | list[list[object]] | Opciones de equipo inicial |
 | `starting_gold` | int | Oro alternativo si el jugador elige comprar |
 | `asi_levels` | list[int] | Niveles donde se otorga ASI/Dote (varía por clase) |
+| `multiclass_requirements` | list[object] | Requisitos de atributo para adoptar la clase en multiclaseo; lista vacía si no hay requisito. Cada entrada: `{ "ability": "STR", "min_score": 13, "operator": "AND" }`. El campo `operator` solo es necesario si hay más de un requisito; puede ser `"AND"` (todos requeridos) o `"OR"` (basta uno). |
 
 **Ejemplo mínimo — Bardo:**
 
@@ -123,7 +150,10 @@ Cada entrada describe una clase base completa.
     [{"slug": "longsword", "qty": 1}]
   ],
   "starting_gold": 125,
-  "asi_levels": [4, 8, 12, 16, 19]
+  "asi_levels": [4, 8, 12, 16, 19],
+  "multiclass_requirements": [
+    {"ability": "CHA", "min_score": 13}
+  ]
 }
 ```
 
@@ -423,9 +453,16 @@ class ClassData:
     equipment_choices: list
     starting_gold: int
     asi_levels: list[int]
+    # MULTICLASEO: requisitos de atributo para adoptar esta clase como segunda clase.
+    # Lista vacía = sin requisito. Cada dict: {ability, min_score, operator (AND|OR)}.
+    multiclass_requirements: list[dict]
 ```
 
 Modelos similares para: `SubclassData`, `SpeciesData`, `BackgroundData`, `FeatData`, `SpellData`, `WeaponData`, `ArmorData`, `EquipmentData`.
+
+> **Nota de validación — multiclaseo:** El `loader.py` debe verificar que todas las entradas
+> de `multiclass_requirements` usen abilities válidas (STR, DEX, CON, INT, WIS, CHA) y que
+> el campo `operator`, si está presente, sea `"AND"` o `"OR"`.
 
 ---
 

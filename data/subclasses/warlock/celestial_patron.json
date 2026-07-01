@@ -1,0 +1,69 @@
+{
+  "slug": "celestial_patron",
+  "class_slug": "warlock",
+  "name": "Celestial Patron",
+  "description": "Your patron is a mighty being from the Upper Planes.",
+  "features_by_level": {
+    "3": [
+      "Celestial Spells",
+      "Healing Light",
+      "Radiance of the Dawn"
+    ],
+    "6": [
+      "Radiant Soul"
+    ],
+    "10": [
+      "Celestial Resilience"
+    ],
+    "14": [
+      "Searing Vengeance"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "cure_wounds",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "faerie_fire",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "flame_strike",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "healing_word",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "calm_emotions",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "daylight",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "aid",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "aura_of_vitality",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "guardian_of_faith",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "mass_cure_wounds",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "greater_restoration",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": []
+}

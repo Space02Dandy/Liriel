@@ -1,0 +1,76 @@
+{
+  "slug": "oath_of_glory",
+  "class_slug": "paladin",
+  "name": "Oath of Glory",
+  "description": "Strives to reach the pinnacle of heroism.",
+  "features_by_level": {
+    "3": [
+      "Oath of Glory Spells",
+      "Peerless Athlete",
+      "Inspiring Smite"
+    ],
+    "7": [
+      "Aura of Alacrity"
+    ],
+    "15": [
+      "Glorious Defense"
+    ],
+    "20": [
+      "Living Legend"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "heroism",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "guiding_bolt",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "magic_weapon",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "enhance_ability",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "haste",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "protection_from_energy",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "compulsion",
+      "class_level": 13
+    },
+    {
+      "spell_slug": "freedom_of_movement",
+      "class_level": 13
+    },
+    {
+      "spell_slug": "legend_lore",
+      "class_level": 17
+    },
+    {
+      "spell_slug": "yolandes_regal_presence",
+      "class_level": 17
+    }
+  ],
+  "spell_locks": [
+    "heroism",
+    "guiding_bolt",
+    "magic_weapon",
+    "enhance_ability",
+    "haste",
+    "protection_from_energy",
+    "compulsion",
+    "freedom_of_movement",
+    "legend_lore",
+    "yolandes_regal_presence"
+  ]
+}

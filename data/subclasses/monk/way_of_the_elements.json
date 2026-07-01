@@ -1,0 +1,23 @@
+{
+  "slug": "way_of_the_elements",
+  "class_slug": "monk",
+  "name": "Warrior of the Elements",
+  "description": "Employs attacks and bursts of elemental power.",
+  "features_by_level": {
+    "3": [
+      "Elemental Attunement",
+      "Manipulate Elements"
+    ],
+    "6": [
+      "Elemental Burst"
+    ],
+    "11": [
+      "Stride of the Elements"
+    ],
+    "17": [
+      "Elemental Epitome"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

@@ -1,0 +1,22 @@
+{
+  "slug": "path_of_the_berserker",
+  "class_slug": "barbarian",
+  "name": "Path of the Berserker",
+  "description": "Channels fury into untamed violence.",
+  "features_by_level": {
+    "3": [
+      "Frenzy"
+    ],
+    "6": [
+      "Mindless Rage"
+    ],
+    "10": [
+      "Retaliation"
+    ],
+    "14": [
+      "Intimidating Presence"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

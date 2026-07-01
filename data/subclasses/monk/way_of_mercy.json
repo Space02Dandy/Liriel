@@ -1,0 +1,24 @@
+{
+  "slug": "way_of_mercy",
+  "class_slug": "monk",
+  "name": "Warrior of Mercy",
+  "description": "Manipulates the forces of life and death.",
+  "features_by_level": {
+    "3": [
+      "Implements of Mercy",
+      "Hand of Harm",
+      "Hand of Healing"
+    ],
+    "6": [
+      "Physician's Touch"
+    ],
+    "11": [
+      "Flurry of Healing and Harm"
+    ],
+    "17": [
+      "Hand of Ultimate Mercy"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

@@ -1,0 +1,51 @@
+{
+  "slug": "fey_wanderer",
+  "class_slug": "ranger",
+  "name": "Fey Wanderer",
+  "description": "Uses the joy and fury of the fey.",
+  "features_by_level": {
+    "3": [
+      "Fey Wanderer Spells",
+      "Otherworldly Glamour",
+      "Dreadful Strikes"
+    ],
+    "7": [
+      "Beguiling Twist"
+    ],
+    "11": [
+      "Fey Reinforcements"
+    ],
+    "15": [
+      "Misty Wanderer"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "charm_person",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "misty_step",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "summon_fey",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "dimension_door",
+      "class_level": 13
+    },
+    {
+      "spell_slug": "mislead",
+      "class_level": 17
+    }
+  ],
+  "spell_locks": [
+    "charm_person",
+    "misty_step",
+    "summon_fey",
+    "dimension_door",
+    "mislead"
+  ]
+}

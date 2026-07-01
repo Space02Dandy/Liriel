@@ -1,0 +1,26 @@
+{
+  "slug": "eldritch_knight",
+  "class_slug": "fighter",
+  "name": "Eldritch Knight",
+  "description": "Strengthens your combat skills with arcane magic.",
+  "features_by_level": {
+    "3": [
+      "Spellcasting",
+      "War Bond"
+    ],
+    "7": [
+      "War Magic"
+    ],
+    "10": [
+      "Eldritch Strike"
+    ],
+    "15": [
+      "Arcane Charge"
+    ],
+    "18": [
+      "Improved War Magic"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

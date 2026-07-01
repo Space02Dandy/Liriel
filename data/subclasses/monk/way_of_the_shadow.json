@@ -1,0 +1,22 @@
+{
+  "slug": "way_of_the_shadow",
+  "class_slug": "monk",
+  "name": "Warrior of the Shadow",
+  "description": "Uses the power of shadow for stealth and subterfuge.",
+  "features_by_level": {
+    "3": [
+      "Shadow Arts"
+    ],
+    "6": [
+      "Shadow Step"
+    ],
+    "11": [
+      "Improved Shadow Step"
+    ],
+    "17": [
+      "Cloak of Shadows"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

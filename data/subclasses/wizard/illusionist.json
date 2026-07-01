@@ -1,0 +1,23 @@
+{
+  "slug": "illusionist",
+  "class_slug": "wizard",
+  "name": "Illusionist",
+  "description": "Weaves subtle spells of deception with illusion magic.",
+  "features_by_level": {
+    "3": [
+      "Illusion Savant",
+      "Improved Illusions"
+    ],
+    "6": [
+      "Phantasmal Creatures"
+    ],
+    "10": [
+      "Illusory Self"
+    ],
+    "14": [
+      "Illusory Reality"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

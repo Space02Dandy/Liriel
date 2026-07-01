@@ -1,0 +1,23 @@
+{
+  "slug": "hunter",
+  "class_slug": "ranger",
+  "name": "Hunter",
+  "description": "Protects nature and people from destruction.",
+  "features_by_level": {
+    "3": [
+      "Hunter's Lore",
+      "Hunter's Prey"
+    ],
+    "7": [
+      "Defensive Tactics"
+    ],
+    "11": [
+      "Superior Hunter's Prey"
+    ],
+    "15": [
+      "Superior Hunter's Defense"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

@@ -1,0 +1,20 @@
+{
+  "slug": "college_of_lore",
+  "class_slug": "bard",
+  "name": "College of Lore",
+  "description": "Gathers spells and secrets from many sources.",
+  "features_by_level": {
+    "3": [
+      "Bonus Proficiencies",
+      "Cutting Words"
+    ],
+    "6": [
+      "Magical Discoveries"
+    ],
+    "14": [
+      "Peerless Skill"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

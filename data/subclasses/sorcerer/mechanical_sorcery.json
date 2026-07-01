@@ -1,0 +1,75 @@
+{
+  "slug": "mechanical_sorcery",
+  "class_slug": "sorcerer",
+  "name": "Clockwork Sorcery",
+  "description": "Channels the cosmic forces of order.",
+  "features_by_level": {
+    "3": [
+      "Clockwork Spells",
+      "Restore Balance"
+    ],
+    "6": [
+      "Bastion of Law"
+    ],
+    "14": [
+      "Trance of Order"
+    ],
+    "18": [
+      "Clockwork Cavalcade"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "alarm",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "aid",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "protection_from_evil_and_good",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "lesser_restoration",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "dispel_magic",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "protection_from_energy",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "animate_objects",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "freedom_of_movement",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "wall_of_force",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "greater_restoration",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": [
+    "alarm",
+    "aid",
+    "protection_from_evil_and_good",
+    "lesser_restoration",
+    "dispel_magic",
+    "protection_from_energy",
+    "animate_objects",
+    "freedom_of_movement",
+    "wall_of_force",
+    "greater_restoration"
+  ]
+}

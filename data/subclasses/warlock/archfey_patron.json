@@ -1,0 +1,57 @@
+{
+  "slug": "archfey_patron",
+  "class_slug": "warlock",
+  "name": "Archfey Patron",
+  "description": "Your patron is a fey lord or an entity from the Feywild.",
+  "features_by_level": {
+    "3": [
+      "Archfey Spells",
+      "Steps of the Fey",
+      "Beguiling Defenses"
+    ],
+    "6": [
+      "Misty Escape"
+    ],
+    "10": [
+      "Beguiling Defenses"
+    ],
+    "14": [
+      "Bewitching Magic"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "disguise_self",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "charm_person",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "calm_emotions",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "mirror_image",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "confusion",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "hypnotic_pattern",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "hold_monster",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "hold_monster",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": []
+}

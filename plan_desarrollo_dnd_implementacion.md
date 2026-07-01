@@ -50,8 +50,16 @@ Liriel/
 ├── main.py                    # Punto de entrada
 ├── requirements.txt
 ├── data/                      # JSON de reglas del juego (estáticos)
-│   ├── classes.json
-│   ├── subclasses.json
+│   ├── classes/               # Un .json por clase base (12 archivos)
+│   │   ├── barbarian.json
+│   │   ├── bard.json
+│   │   └── …  (wizard.json, etc.)
+│   ├── subclasses/            # Subcarpeta por clase, un .json por subclase
+│   │   ├── barbarian/
+│   │   │   ├── senda_del_berserker.json
+│   │   │   └── …  (4 archivos)
+│   │   ├── bard/  (…4 archivos)
+│   │   └── …  (12 carpetas, 48 archivos en total)
 │   ├── species.json
 │   ├── backgrounds.json
 │   ├── feats.json
@@ -203,6 +211,7 @@ El proyecto abre y el entorno ejecuta tests sin fallar.
 ### Tareas — Archivos JSON
 
 - [ ] `data/classes.json` — Incluir al menos: Bárbaro, Bardo, Clérigo, Druida, Guerrero, Monje, Paladín, Explorador, Pícaro, Hechicero, Brujo, Mago.
+  - **⚠️ Multiclaseo:** Cada clase debe incluir el campo `multiclass_requirements` (ver Fase 1 nota abajo).
 - [ ] `data/subclasses.json` — 2-3 subclases por clase (las del SRD 2024).
 - [ ] `data/species.json` — Humano, Elfo, Enano, Halfling, Gnomo, Semiorco, Tiefling, Draconiano.
 - [ ] `data/backgrounds.json` — Al menos 10 trasfondos del manual básico 2024.
@@ -212,12 +221,40 @@ El proyecto abre y el entorno ejecuta tests sin fallar.
 - [ ] `data/equipment.json` — Paquetes de clase, herramientas, equipo básico.
 - [ ] `data/spells.json` — Conjuros del SRD niveles 0-9 (mínimo 50 conjuros representativos por escuela).
 
+> **Nota multiclaseo — `multiclass_requirements` en `classes.json`:**
+> Cada entrada de clase debe añadir el campo:
+> ```json
+> "multiclass_requirements": [
+>   {"ability": "STR", "min_score": 13}
+> ]
+> ```
+> Puede ser una lista vacía `[]` si la clase no tiene requisito (ej. Mago sí requiere INT 13).
+> Algunos ejemplos:
+> | Clase | Requisito |
+> |---|---|
+> | Bárbaro | STR 13 |
+> | Bardo | CHA 13 |
+> | Clérigo | WIS 13 |
+> | Druida | WIS 13 |
+> | Guerrero | STR 13 **o** DEX 13 |
+> | Monje | DEX 13 **y** WIS 13 |
+> | Paladín | STR 13 **y** CHA 13 |
+> | Explorador | DEX 13 **y** WIS 13 |
+> | Pícaro | DEX 13 |
+> | Hechicero | CHA 13 |
+> | Brujo | CHA 13 |
+> | Mago | INT 13 |
+>
+> Para requisitos con **o** lógico (ej. Guerrero), usar `"operator": "OR"` en la lista.
+> El `ClassData` en `models.py` debe incluir `multiclass_requirements: list[dict]`.
+
 ### Tareas — Tests
 
 - [ ] `tests/test_loader.py`:
   - Verificar que todos los JSON cargan sin excepción.
   - Verificar que el recuento de objetos es correcto (≥ N por tipo).
   - Verificar slugs únicos.
+  - Verificar que todas las clases tienen el campo `multiclass_requirements`.
 - [ ] `tests/test_loader.py` — tests de referencias cruzadas:
   - `class_slug` de subclases existe en clases.
   - `origin_feat_slug` de trasfondos existe en dotes.
@@ -230,78 +267,104 @@ El proyecto arranca, carga datos y detecta cualquier error de contenido antes de
 
 ## Fase 2 — Modelo de personaje
 
-**Objetivo:** Objeto central `CharacterState` que representa una hoja de personaje completa.
+**Objetivo:** Objeto central `CharacterState` que representa una hoja de personaje completa con soporte nativo de multiclaseo.
 
 ### Tareas
 
-- [ ] Crear `src/engine/character.py` con `CharacterState`:
+- [ ] Definir la estructura auxiliar `ClassEntry` en `src/engine/character.py`:
+
+```python
+@dataclass
+class ClassEntry:
+    """
+    Representa un nivel en una clase específica.
+    El personaje puede tener varios ClassEntry (uno por clase multiclaseada).
+    """
+    class_slug: str          # Referencia al slug en classes.json
+    level: int               # Niveles alcanzados en ESTA clase (1-20)
+    subclass_slug: str | None  # None hasta que el jugador elige en nivel 3 de clase
+    hit_dice_rolled: list[int]  # Resultado de cada tirada de dado de golpe en esta clase
+                                 # len(hit_dice_rolled) == level
+```
+
+- [ ] Crear `CharacterState` usando `class_levels` en lugar de `class_slug`/`subclass_slug`/`level`:
 
 ```python
 @dataclass
 class CharacterState:
     # Identidad
     name: str
-    class_slug: str
-    subclass_slug: str | None
+    class_levels: list[ClassEntry]   # ← MULTICLASEO: una entrada por clase tomada
     species_slug: str
     lineage_slug: str | None
     background_slug: str
-    level: int
 
-    # Puntuaciones de característica (base + ASI acumulado)
+    # Puntuaciones de característica (base + todos los ASI acumulados)
     ability_scores: dict[str, int]   # {"STR": 16, "DEX": 14, ...}
 
     # Salud
     hp_max: int
     hp_current: int
     hp_temp: int
-    hit_dice_used: int
 
     # Equipo activo
     armor_slug: str | None
     shield_equipped: bool
-    weapons: list[str]               # slugs equipados
-    inventory: list[dict]            # {"slug": str, "qty": int}
+    weapons: list[str]               # slugs de armas equipadas
+    inventory: list[dict]            # [{"slug": str, "qty": int}, ...]
 
     # Conjuros
-    spells_known: list[str]          # slugs
-    spells_prepared: list[str]       # slugs (clases que preparan)
-    spell_slots_used: dict[str, int] # {"1": N_usados, "2": N_usados, ...}
+    # Organizado por clase: cada clave es un class_slug lanzador.
+    # Permite que Mago y Bardo tengan listas separadas en un multiclase.
+    spells_known: dict[str, list[str]]   # {"bard": [slugs...], "wizard": [slugs...]}
+    spells_prepared: dict[str, list[str]] # ídem para clases que preparan
+    # Slots compartidos entre todas las clases (regla de multiclaseo)
+    # Los Warlock slots van aparte: warlock_slots_max + warlock_slots_used
+    spell_slots_used: dict[str, int]     # {"1": N, "2": N, ...} slots combinados gastados
+    warlock_slots_max: int               # 0 si no hay Brujo
+    warlock_slots_used: int              # 0 si no hay Brujo
+    warlock_slot_level: int              # Nivel de los slots de Magia de Pacto (1-5)
 
-    # Opciones acumuladas
+    # Opciones acumuladas (de todas las clases + trasfondo + especie)
     skill_proficiencies: list[str]
     tool_proficiencies: list[str]
     saving_throw_proficiencies: list[str]
-    feats: list[str]                 # slugs de dotes tomadas
+    feats: list[str]                     # slugs de dotes tomadas
 
     # Metadatos
     xp: int
-    created_at: str                  # ISO 8601
+    created_at: str                      # ISO 8601
     updated_at: str
 ```
 
-- [ ] Implementar **propiedades calculadas** (no almacenadas):
+- [ ] Implementar **propiedades calculadas** (no almacenadas, derivadas de `class_levels`):
+  - `total_level() -> int` → `sum(e.level for e in class_levels)` ← **clave para multiclaseo**
+  - `level_in_class(class_slug: str) -> int` → 0 si el personaje no tiene esa clase
+  - `primary_class() -> ClassEntry` → la clase con más niveles (o la primera si empate)
   - `ability_modifier(ability: str) -> int` → `floor((score - 10) / 2)`
-  - `proficiency_bonus() -> int` → según nivel total
+  - `proficiency_bonus() -> int` → escala con `total_level()`, NO con nivel de clase
   - `initiative() -> int` → modificador DEX
   - `ac() -> int` → según armadura equipada + DEX + escudo
-  - `spell_save_dc(ability: str) -> int` → `8 + PB + mod`
-  - `spell_attack_bonus(ability: str) -> int` → `PB + mod`
-  - `saving_throw(ability: str) -> int` → mod + PB si competente
+  - `saving_throw(ability: str) -> int` → mod + PB si competente en alguna de las clases
   - `skill_bonus(skill: str) -> int` → mod + PB si competente
   - `weapon_attack_bonus(weapon_slug: str) -> int`
   - `weapon_damage_bonus(weapon_slug: str) -> int`
 
 - [ ] Implementar `to_dict() -> dict` y `from_dict(d: dict) -> CharacterState`.
+  - `class_levels` debe serializarse como lista de dicts `{"class_slug": ..., "level": ..., "subclass_slug": ..., "hit_dice_rolled": [...]}`.
 - [ ] Crear `src/utils/file_io.py`:
   - `save_character(character: CharacterState, path: Path) -> None`
   - `load_character(path: Path) -> CharacterState`
   - Formato: JSON con extensión `.liriel`
-- [ ] Tests de serialización: un personaje guardado y recargado debe ser idéntico.
-- [ ] Tests de propiedades calculadas con valores conocidos.
+- [ ] Tests de serialización:
+  - Personaje monoclase: guardado y recargado idéntico.
+  - Personaje multiclase (Bardo 3 / Guerrero 2): `class_levels` se serializa y deserializa correctamente.
+- [ ] Tests de propiedades calculadas:
+  - Bardo 4 / Guerrero 1 → `total_level() == 5`, `proficiency_bonus() == 3`.
+  - Mago 3 / Clérigo 1 → `level_in_class('wizard') == 3`, `level_in_class('paladin') == 0`.
 
 ### Resultado esperado
-Un personaje puede existir en memoria, serializar a disco y recuperarse intacto.
+Un personaje puede existir en memoria, serializar a disco y recuperarse intacto, tanto monoclase como multiclase.
 
 ---
 
@@ -316,6 +379,10 @@ Un personaje puede existir en memoria, serializar a disco y recuperarse intacto.
   - `validate_asi_choices(background_slug, chosen_abilities, repo) -> bool`
   - `validate_equipment_choice(class_slug, choice_index, repo) -> bool`
   - `validate_feat_prerequisites(feat_slug, character, repo) -> bool`
+  - `validate_multiclass_requirements(target_class_slug, character, repo) -> bool`
+    → Verifica que el personaje cumple los requisitos de atributo de la nueva clase.
+    → Verifica que el personaje no supera el nivel 20 total al añadir esta clase.
+    → Devuelve `False` con mensaje de error si el requisito no se cumple.
 
 - [ ] Crear `src/engine/combat.py` (solo cálculos pasivos para la hoja):
   - `calculate_ac(character: CharacterState, repo: GameDataRepository) -> int`
@@ -323,13 +390,27 @@ Un personaje puede existir en memoria, serializar a disco y recuperarse intacto.
   - `calculate_weapon_attack(character, weapon_slug, repo) -> tuple[int, str]`
     → devuelve (bono_total, cadena_daño) ej: `(+5, "1d8+3")`
 
-- [ ] Crear `src/engine/spellcasting.py`:
-  - `get_available_slots(class_slug, level, repo) -> dict[str, int]`
-  - `get_max_cantrips(class_slug, level, repo) -> int`
-  - `get_max_spells_known(class_slug, level, repo) -> int | None` (None si prepara)
+- [ ] Crear `src/engine/spellcasting.py` con soporte de multiclaseo:
+  - `get_single_class_caster_level(class_slug: str, class_level: int, repo) -> float`
+    → Devuelve el nivel efectivo de lanzador para una clase:
+    → Lanzadores completos (Bardo, Clérigo, Druida, Mago, Hechicero): `class_level × 1.0`
+    → Medio lanzadores (Explorador, Paladín): `class_level × 0.5`
+    → Lanzadores de un tercio (Guerrero con Caballero Arcano, Pícaro con Embaucador Arcano): `class_level × 0.333` (solo si subclase seleccionada)
+    → Brujo: no cuenta para la suma combinada (tiene su propio pool)
+    → No lanzadores: `0`
+  - `calculate_combined_spell_slots(character: CharacterState, repo) -> dict[str, int]`
+    → Suma los niveles efectivos de todas las clases lanzadoras usando `get_single_class_caster_level()`.
+    → El total (redondeado hacia abajo) se usa como índice en la tabla de progresión de lanzador completo.
+    → Devuelve el diccionario de slots totales combinados.
+    → Los slots del Brujo (Magia de Pacto) se calculan **separadamente** y no se mezclan.
+  - `get_warlock_slots(warlock_level: int) -> tuple[int, int]`
+    → Devuelve `(max_slots, slot_level)` según la tabla de Brujo.
+  - `get_max_cantrips(class_slug, class_level, repo) -> int`
+  - `get_max_spells_known(class_slug, class_level, repo) -> int | None` (None si prepara)
   - `filter_spells_for_class(class_slug, max_spell_level, repo) -> list[SpellData]`
-  - `calculate_spell_save_dc(character, repo) -> int`
-  - `calculate_spell_attack_bonus(character, repo) -> int`
+  - `calculate_spell_save_dc(character, class_slug, repo) -> int`
+    → Recibe `class_slug` porque en multiclase cada clase tiene su propia habilidad de lanzador.
+  - `calculate_spell_attack_bonus(character, class_slug, repo) -> int`
 
 - [ ] Crear `src/engine/factory.py` con `CharacterFactory` y `CreationContext`:
 
@@ -371,7 +452,21 @@ Se puede generar un personaje nivel 1 completamente funcional sin abrir la UI.
 
 ## Fase 4 — Motor de subida de nivel
 
-**Objetivo:** Progresión completa de nivel 1 a 20 con todas las reglas.
+**Objetivo:** Progresión completa de nivel 1 a 20 con soporte nativo de multiclaseo.
+
+### Principio fundamental: nivel total vs nivel de clase
+
+> Los disparadores de la hoja dependen de **dos contadores distintos** que el motor
+> debe tratar de forma estricta e independiente:
+>
+> | Disparador | Escala con | Ejemplo |
+> |---|---|---|
+> | Bono de Competencia | **Nivel Total** | PB +3 cuando `total_level == 5` |
+> | ASI / Dote | **Nivel de Clase** | ASI al nivel 4 de Bardo, independientemente de cuántos niveles de Guerrero tenga |
+> | Subclase | **Nivel de Clase == 3** | Subclase de Bardo al alcanzar el 3.° nivel de Bardo |
+> | Rasgos de clase/subclase | **Nivel de Clase** | Los rasgos de tabla del Bardo usan su nivel de Bardo |
+> | Slots de conjuro combinados | **Nivel Total ponderado** | Suma de niveles efectivos de todas las clases lanzadoras |
+> | Slots del Brujo (Pacto) | **Nivel de Brujo** | Independiente, no se mezclan |
 
 ### Tareas
 
@@ -379,44 +474,102 @@ Se puede generar un personaje nivel 1 completamente funcional sin abrir la UI.
 
 ```python
 class LevelUpEngine:
-    def level_up(self, character: CharacterState, choices: LevelUpChoices, repo) -> CharacterState:
-        """Aplica una subida de nivel y devuelve el nuevo CharacterState."""
+    def level_up(
+        self,
+        character: CharacterState,
+        choices: LevelUpChoices,
+        repo: GameDataRepository
+    ) -> CharacterState:
+        """
+        Aplica una subida de nivel en la clase indicada por choices.target_class_slug.
+        Si la clase no existe aún en character.class_levels, la añade (multiclaseo).
+        Devuelve un nuevo CharacterState inmutable.
+        """
 ```
 
-- [ ] `LevelUpChoices` debe contemplar:
-  - `hp_roll: int | None` → None = usar promedio fijo
-  - `subclass_slug: str | None` → requerido si nivel == 3
-  - `feat_slug: str | None` → si es nivel de ASI/Dote
-  - `asi_choices: dict[str, int] | None` → si elige ASI en lugar de dote
-  - `new_spells: list[str]` → slugs de conjuros aprendidos
-  - `replaced_spell: str | None` → slug del conjuro olvidado
+- [ ] Definir `LevelUpChoices` con soporte de multiclaseo:
 
-- [ ] Lógica de `level_up()`:
-  1. Incrementar `character.level`.
-  2. Calcular nuevo HP: `hp_roll_or_avg + CON_mod` y añadir al máximo.
-  3. Si nivel 3: aplicar subclase.
-  4. Si nivel es ASI/Dote: aplicar feat o ASI (y llamar retroactividad si sube CON).
-  5. Si nivel aumenta el bono de competencia: recalcular todas las competencias.
-  6. Actualizar slots de conjuro según la tabla de la clase.
-  7. Añadir conjuros aprendidos, eliminar el reemplazado si aplica.
-  8. Activar nuevos rasgos de clase y subclase para ese nivel.
+```python
+@dataclass
+class LevelUpChoices:
+    # OBLIGATORIO: en qué clase se aplica el nuevo nivel
+    target_class_slug: str
+    # True si es una clase NUEVA (multiclaseo); False si ya existe en class_levels
+    is_new_class: bool
+
+    # HP
+    hp_roll: int | None    # None = usar promedio fijo (floor(hit_die/2) + 1)
+
+    # Subclase — solo requerido si level_in_class(target_class_slug) == 2
+    # (es decir, al alcanzar el nivel 3 de esa clase)
+    subclass_slug: str | None
+
+    # ASI o Dote — solo si target_class_slug.asi_levels contiene el nivel de clase resultante
+    feat_slug: str | None              # None = usar ASI en lugar de dote
+    asi_choices: dict[str, int] | None # {"STR": 1, "DEX": 1} si elige ASI
+
+    # Conjuros — listas por clase porque cada clase tiene su propia lista
+    new_spells: list[str]       # slugs a aprender
+    replaced_spell: str | None  # slug a olvidar (si la clase permite sustitución)
+```
+
+- [ ] Lógica de `level_up()` — orden estricto de operaciones:
+
+  1. **Validar `target_class_slug`:**
+     - Si `is_new_class=True`: llamar `validate_multiclass_requirements()`. Si falla, lanzar `ValidationError`.
+     - Si `is_new_class=False`: verificar que la clase ya existe en `class_levels`.
+  2. **Calcular nuevo nivel de clase:**
+     - `new_class_level = level_in_class(target_class_slug) + 1`
+     - Verificar que `total_level() + 1 <= 20`.
+  3. **Añadir HP:**
+     - `hp_gained = hp_roll_or_avg + CON_mod` con el dado de golpe de `target_class_slug`.
+     - Si `is_new_class=True`: el HP del nivel 1 de la nueva clase es `1 + CON_mod` (se asume máximo para la primera toma). *Ajustar según política de casa.*
+  4. **Actualizar `class_levels`:**
+     - Si clase nueva: añadir `ClassEntry(class_slug=target, level=1, subclass_slug=None, hit_dice_rolled=[roll])`.
+     - Si clase existente: incrementar `entry.level` y hacer `append(roll)` en `hit_dice_rolled`.
+  5. **Disparadores de NIVEL DE CLASE** (usar `new_class_level`, no `total_level`):
+     - Si `new_class_level == 3`: activar selección de subclase para `target_class_slug`.
+     - Si `new_class_level` está en `class_data.asi_levels`: activar ASI o Dote.
+     - Activar rasgos de clase y subclase para `new_class_level`.
+  6. **Disparadores de NIVEL TOTAL** (usar `total_level()` después del incremento):
+     - Si `total_level()` cruza umbral (5, 9, 13, 17): actualizar `proficiency_bonus`.
+  7. **Actualizar slots de conjuro (regla multiclase):**
+     - Llamar a `spellcasting.calculate_combined_spell_slots(character_updated, repo)`.
+     - Reemplazar `spell_slots_max` con el resultado combinado.
+     - Si `target_class_slug == 'warlock'`: recalcular también `warlock_slots_max` y `warlock_slot_level`.
+  8. **Actualizar conjuros disponibles:**
+     - Añadir `new_spells` a `spells_known[target_class_slug]`.
+     - Eliminar `replaced_spell` si aplica.
+  9. **Aplicar ASI o Dote:**
+     - Si `feat_slug` definido: añadir a `feats` y aplicar `asi` del feat a `ability_scores`.
+     - Si `asi_choices` definido: aplicar directamente a `ability_scores`.
+     - Si cambió CON: llamar retroactividad.
 
 - [ ] Crear `src/engine/retroactivity.py`:
   - `recalculate_hp_for_con_increase(character: CharacterState, old_con_mod: int, new_con_mod: int) -> int`
-  - Fórmula: `new_hp_max = old_hp_max + (new_con_mod - old_con_mod) * level`
+  - Fórmula: `new_hp_max = old_hp_max + (new_con_mod - old_con_mod) * total_level`
+  - **Nota multiclase:** usa `total_level()`, no nivel de una clase.
 
 - [ ] Tests `tests/test_progression.py`:
-  - Subir un Bardo de nivel 1 a 20, verificar HP, PB y slots en cada paso.
-  - Verificar que nivel 3 activa la selección de subclase.
-  - Verificar que nivel 4, 8, 12, 16, 19 activan ASI/Dote.
-  - Guerrero: verificar ASI extra en niveles 6, 14.
+  - Subir un Bardo monoclase de nivel 1 a 20 → verificar HP, PB y slots en cada paso.
+  - Verificar que nivel 3 **de Bardo** activa la selección de subclase.
+  - Verificar que nivel 4 **de Bardo** activa ASI, sin importar cuántos niveles tenga de otras clases.
+  - Guerrero: verificar ASI extra en niveles **de clase** 6 y 14.
+  - **Tests de multiclaseo:**
+    - Bardo 3 → añadir Guerrero 1 → `total_level == 4`, PB sigue siendo +2.
+    - Bardo 4 → Guerrero 1 → `total_level == 5`, PB sube a +3 (disparado por nivel total).
+    - Bardo 4 / Guerrero 1 → verificar que ASI del nivel 4 de Bardo ya fue aplicada, y que el nivel 1 de Guerrero NO dispara ASI.
+    - Bardo 2 → añadir clase nueva Guerrero → verificar `validate_multiclass_requirements` con STR 13.
+    - Bardo 5 / Mago 5 → slots combinados: nivel efectivo = 5+5=10 → tabla de lanzador nivel 10.
+    - Bardo 3 / Brujo 2 → slots de Bardo nivel 3 (combinados) + slots de Pacto nivel 2 de Brujo **separados**.
+    - Explorador 4 / Paladín 4 → nivel efectivo = 2 + 2 = 4 (mitad de cada uno).
 
 - [ ] Tests `tests/test_retroactivity.py`:
-  - Personaje nivel 5 CON 14 (+2) sube a CON 16 (+3) → HP debe subir en +5.
-  - Personaje nivel 10 sube CON en 2 puntos → HP sube en +10.
+  - Personaje nivel total 5 CON 14 (+2) sube a CON 16 (+3) → HP sube en +5 (`total_level * delta_mod`).
+  - Personaje multiclase Bardo 3 / Guerrero 2 sube CON → HP sube en +5 (usa `total_level == 5`).
 
 ### Resultado esperado
-El personaje puede subir de nivel sin perder consistencia mecánica.
+El personaje puede subir de nivel, monoclase o multiclase, sin perder consistencia mecánica.
 
 ---
 
@@ -503,13 +656,13 @@ El usuario puede crear un personaje completo sin tocar la consola.
 
 | Sección | Contenido |
 |---|---|
-| Cabecera | Nombre, clase/subclase, especie, trasfondo, nivel |
+| Cabecera | Nombre, especie, trasfondo, nivel total; **lista de clases**: `Bardo 4 / Guerrero 1` con subclase de cada una |
 | Características | 6 `StatWidget` con puntuación y modificador |
 | Combate pasivo | HP (actual/máximo), CA, Iniciativa, Velocidad, Bono de Competencia |
 | Salvaciones | 6 filas con modificador total |
 | Habilidades | 18 `SkillWidget` con pericia/experiencia marcada |
-| Rasgos | Lista de rasgos activos de clase, subclase, especie y dotes |
-| Conjuros | Tabla de slots disponibles/usados + lista de conjuros conocidos/preparados |
+| Rasgos | Lista de rasgos activos de **cada clase y subclase**, especie y dotes; agrupados por origen |
+| Conjuros | Pool de slots combinados (si hay ≥1 lanzador) + slots de Pacto (si hay Brujo); lista de conjuros por clase |
 | Equipo | Lista de inventario con peso total; botón de equipar/quitar |
 
 - [ ] Botón **Guardar** → `file_io.save_character()`.
@@ -525,27 +678,46 @@ La hoja funciona como pantalla central de la aplicación.
 
 ## Fase 8 — Level Up (GUI)
 
-**Objetivo:** Subir de nivel desde la interfaz con todas las decisiones requeridas.
+**Objetivo:** Subir de nivel desde la interfaz con todas las decisiones requeridas, incluyendo multiclaseo.
 
 ### Tareas
 
 - [ ] Crear `src/ui/scenes/level_up_scene.py`.
-- [ ] Construir el flujo de decisiones según el nivel destino:
+- [ ] El flujo de pantallas es secuencial. **El primer paso siempre es la selección de clase:**
 
-| Decisión | Cuándo aparece |
+#### Paso 1 — Selección de clase (SIEMPRE el primer paso)
+
+- [ ] Mostrar dos opciones exclusivas:
+  - **Avanzar en una clase actual:** lista de `ClassEntry` del personaje con su nivel actual.
+  - **Adoptar una nueva clase (multiclaseo):** lista de clases disponibles en el repositorio.
+    - Cada clase muestra sus `multiclass_requirements`. Las que el personaje NO cumple aparecen en gris y deshabilitadas.
+    - Al pasar el cursor sobre una clase deshabilitada, mostrar tooltip: *"Requiere [Característica] [valor]"*.
+    - Si `total_level() == 20`: deshabilitar la opción de nueva clase completamente.
+- [ ] El usuario selecciona `target_class_slug` e `is_new_class`. Esto determina todos los pasos siguientes.
+
+#### Pasos siguientes — Condicionales según clase elegida
+
+| Decisión | Condición |
 |---|---|
-| HP: tirar dado vs promedio | Siempre |
-| Seleccionar subclase | Solo cuando nivel destino == 3 |
-| Seleccionar Dote o ASI | Niveles ASI de la clase (4, 8, 12, 16, 19 para mayoría) |
-| Aprender conjuros nuevos | Si la clase es lanzadora |
-| Reemplazar un conjuro | Si la clase permite sustitución |
+| HP: tirar dado vs promedio | **Siempre** (dado de golpe de `target_class_slug`) |
+| Seleccionar subclase | Solo cuando `level_in_class(target) == 2` (→ alcanza nivel 3 de clase) |
+| Seleccionar Dote o ASI | Solo cuando `new_class_level` está en `class_data.asi_levels` |
+| Aprender conjuros nuevos | Si `target_class_slug` es una clase lanzadora |
+| Reemplazar un conjuro | Si `target_class_slug` permite sustitución en su tabla |
+| Info: PB aumenta | Si `total_level() + 1` cruza umbral (5, 9, 13, 17) — informativo |
 
-- [ ] Vista de preview antes de confirmar: muestra el antes/después de HP, PB, slots, atributos.
-- [ ] Al confirmar, llama `LevelUpEngine.level_up()` → actualiza `CharacterState` → guarda → vuelve a la hoja.
-- [ ] Si el ASI aumenta CON: mostrar aviso de retroactividad con preview del nuevo HP máximo.
+- [ ] Panel lateral permanente durante todo el flujo: **Vista previa de la hoja** actualizada en tiempo real:
+  - Nivel total: `4 → 5`
+  - Desglose de clases: `Bardo 4 / Guerrero 0 → Bardo 4 / Guerrero 1`
+  - HP máximo: `antes → después`
+  - Bono de Competencia: `+2 → +3` (resaltado si cambia)
+  - Slots de conjuro: tabla combinada antes/después
+  - Slots de Pacto: si hay Brujo
+- [ ] Al confirmar, construir `LevelUpChoices` con todos los campos y llamar `LevelUpEngine.level_up()` → actualizar `CharacterState` → guardar → volver a la hoja.
+- [ ] Si el ASI aumenta CON: mostrar aviso de retroactividad con preview del nuevo HP máximo antes de confirmar.
 
 ### Resultado esperado
-El level up en la UI replica exactamente la lógica del motor.
+El level up en la UI replica exactamente la lógica del motor, para personajes monoclase y multiclase.
 
 ---
 
@@ -643,13 +815,16 @@ def paintEvent(self, event):
 
 ## Apéndice — Fórmulas de D&D 5.5e implementadas por el motor
 
+### Fórmulas generales
+
 | Valor | Fórmula |
 |---|---|
 | Modificador de característica | `⌊(puntuación − 10) / 2⌋` |
-| Bono de competencia | Niveles 1-4: +2 / 5-8: +3 / 9-12: +4 / 13-16: +5 / 17-20: +6 |
-| HP nivel 1 | `hit_die + CON_mod` |
+| Nivel total | `sum(entry.level for entry in class_levels)` |
+| Bono de competencia | Nivel total 1-4: +2 / 5-8: +3 / 9-12: +4 / 13-16: +5 / 17-20: +6 |
+| HP nivel 1 (clase inicial) | `hit_die + CON_mod` |
 | HP niveles 2+ | `HP_prev + ⌊hit_die/2⌋ + 1 + CON_mod` (promedio) ó `roll + CON_mod` |
-| HP retroactivo por CON | `HP_max += (new_CON_mod − old_CON_mod) × level` |
+| HP retroactivo por CON | `HP_max += (new_CON_mod − old_CON_mod) × total_level` |
 | CA sin armadura | `10 + DEX_mod` |
 | CA armadura ligera | `base_ac + DEX_mod` |
 | CA armadura media | `base_ac + min(DEX_mod, 2)` |
@@ -664,3 +839,51 @@ def paintEvent(self, event):
 | Bono de ataque a distancia | `DEX_mod + PB` |
 | Daño cuerpo a cuerpo | `dado_arma + STR_mod` (o `DEX_mod` si finesse) |
 | Daño a distancia | `dado_arma + DEX_mod` |
+
+### Fórmulas de multiclaseo — Slots de conjuro combinados
+
+> Fuente: regla de multiclaseo de D&D 5.5e 2024, PHB p. 230.
+
+| Tipo de lanzador | Nivel efectivo por nivel de clase |
+|---|---|
+| Lanzador completo (Bardo, Clérigo, Druida, Mago, Hechicero) | `class_level × 1` |
+| Medio lanzador (Explorador, Paladín) | `floor(class_level × 0.5)` |
+| Tercio lanzador (Guerrero Caballero Arcano, Pícaro Embaucador) | `floor(class_level × 0.333)` solo si subclase activa |
+| Brujo | **No se suma**. Sus slots son independientes (Magia de Pacto) |
+| No lanzador | `0` |
+
+**Cálculo:**
+```
+nivel_efectivo_total = sum(get_single_class_caster_level(class_slug, level))
+combined_slots = tabla_de_lanzador_completo[floor(nivel_efectivo_total)]
+```
+
+**Ejemplo 1:** Bardo 3 / Mago 4
+```
+Nivel efectivo = 3 + 4 = 7
+Slots = tabla nivel 7 → 4×1, 3×2, 3×3, 1×4
+```
+
+**Ejemplo 2:** Paladín 5 / Explorador 6
+```
+Nivel efectivo = floor(5/2) + floor(6/2) = 2 + 3 = 5
+Slots = tabla nivel 5 → 4×1, 3×2, 2×3
+```
+
+**Ejemplo 3:** Bardo 4 / Brujo 3
+```
+Nivel efectivo combinado = 4 (Bardo completo; Brujo no cuenta)
+Slots combinados = tabla nivel 4 → 4×1, 3×2
+Slots de Pacto del Brujo = 2 slots de nivel 2 (tabla de Brujo nivel 3, independientes)
+```
+
+### Disparadores: nivel de clase vs nivel total
+
+| Disparador | Variable correcta |
+|---|---|
+| Bono de Competencia | `total_level()` |
+| ASI / Dote | `level_in_class(class_slug)` comparado con `class_data.asi_levels` |
+| Selección de subclase | `level_in_class(class_slug) == 3` |
+| Rasgos de clase y subclase | `level_in_class(class_slug)` |
+| Slots combinados | `floor(sum de niveles efectivos)` |
+| Slots de Pacto (Brujo) | `level_in_class('warlock')` |

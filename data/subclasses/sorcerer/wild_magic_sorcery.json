@@ -1,0 +1,23 @@
+{
+  "slug": "wild_magic_sorcery",
+  "class_slug": "sorcerer",
+  "name": "Wild Magic Sorcery",
+  "description": "Unleashes chaotic magic from the forces of chaos.",
+  "features_by_level": {
+    "3": [
+      "Wild Magic Surge",
+      "Tides of Chaos"
+    ],
+    "6": [
+      "Bend Luck"
+    ],
+    "14": [
+      "Controlled Chaos"
+    ],
+    "18": [
+      "Tamed Surge"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

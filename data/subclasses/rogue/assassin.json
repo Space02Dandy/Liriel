@@ -1,0 +1,23 @@
+{
+  "slug": "assassin",
+  "class_slug": "rogue",
+  "name": "Assassin",
+  "description": "Practices the grim art of death.",
+  "features_by_level": {
+    "3": [
+      "Assassinate",
+      "Assassin's Tools"
+    ],
+    "9": [
+      "Infiltration Expertise"
+    ],
+    "13": [
+      "Envenom Weapons"
+    ],
+    "17": [
+      "Death Strike"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

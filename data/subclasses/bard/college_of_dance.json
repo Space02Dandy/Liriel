@@ -1,0 +1,20 @@
+{
+  "slug": "college_of_dance",
+  "class_slug": "bard",
+  "name": "College of Dance",
+  "description": "Bards of the dance remain in harmony with the cosmos through movement.",
+  "features_by_level": {
+    "3": [
+      "Dazzling Footwork"
+    ],
+    "6": [
+      "Tandem Footwork",
+      "Inspiring Movement"
+    ],
+    "14": [
+      "Leading Evasion"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

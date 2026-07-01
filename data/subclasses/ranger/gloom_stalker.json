@@ -1,0 +1,51 @@
+{
+  "slug": "gloom_stalker",
+  "class_slug": "ranger",
+  "name": "Gloom Stalker",
+  "description": "Uses shadow magic to fight enemies in the dark.",
+  "features_by_level": {
+    "3": [
+      "Gloom Stalker Spells",
+      "Dread Ambusher",
+      "Umbral Sight"
+    ],
+    "7": [
+      "Iron Mind"
+    ],
+    "11": [
+      "Stalker's Flurry"
+    ],
+    "15": [
+      "Shadowy Dodge"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "disguise_self",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "rope_trick",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "fear",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "greater_invisibility",
+      "class_level": 13
+    },
+    {
+      "spell_slug": "seeming",
+      "class_level": 17
+    }
+  ],
+  "spell_locks": [
+    "disguise_self",
+    "rope_trick",
+    "fear",
+    "greater_invisibility",
+    "seeming"
+  ]
+}

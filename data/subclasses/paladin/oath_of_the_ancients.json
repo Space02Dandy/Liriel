@@ -1,0 +1,75 @@
+{
+  "slug": "oath_of_the_ancients",
+  "class_slug": "paladin",
+  "name": "Oath of the Ancients",
+  "description": "Preserves life and light in the world.",
+  "features_by_level": {
+    "3": [
+      "Oath of the Ancients Spells",
+      "Nature's Wrath"
+    ],
+    "7": [
+      "Aura of Warding"
+    ],
+    "15": [
+      "Undying Sentinel"
+    ],
+    "20": [
+      "Elder Champion"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "grasping_vine",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "speak_with_animals",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "misty_step",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "moonbeam",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "plant_growth",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "protection_from_energy",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "stoneskin",
+      "class_level": 13
+    },
+    {
+      "spell_slug": "ice_storm",
+      "class_level": 13
+    },
+    {
+      "spell_slug": "commune_with_nature",
+      "class_level": 17
+    },
+    {
+      "spell_slug": "tree_stride",
+      "class_level": 17
+    }
+  ],
+  "spell_locks": [
+    "grasping_vine",
+    "speak_with_animals",
+    "misty_step",
+    "moonbeam",
+    "plant_growth",
+    "protection_from_energy",
+    "stoneskin",
+    "ice_storm",
+    "commune_with_nature",
+    "tree_stride"
+  ]
+}

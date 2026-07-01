@@ -1,0 +1,75 @@
+{
+  "slug": "oath_of_the_crown",
+  "class_slug": "paladin",
+  "name": "Oath of Devotion",
+  "description": "Defends the ideals of justice and order.",
+  "features_by_level": {
+    "3": [
+      "Oath of the Crown Spells",
+      "Sacred Weapon"
+    ],
+    "7": [
+      "Aura of Devotion"
+    ],
+    "15": [
+      "Protective Mercy"
+    ],
+    "20": [
+      "Holy Halo"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "shield_of_faith",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "protection_from_evil_and_good",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "aid",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "zone_of_truth",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "dispel_magic",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "beacon_of_hope",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "guardian_of_faith",
+      "class_level": 13
+    },
+    {
+      "spell_slug": "freedom_of_movement",
+      "class_level": 13
+    },
+    {
+      "spell_slug": "commune",
+      "class_level": 17
+    },
+    {
+      "spell_slug": "fire_bolt",
+      "class_level": 17
+    }
+  ],
+  "spell_locks": [
+    "shield_of_faith",
+    "protection_from_evil_and_good",
+    "aid",
+    "zone_of_truth",
+    "dispel_magic",
+    "beacon_of_hope",
+    "guardian_of_faith",
+    "freedom_of_movement",
+    "commune",
+    "fire_bolt"
+  ]
+}

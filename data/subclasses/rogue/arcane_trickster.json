@@ -1,0 +1,23 @@
+{
+  "slug": "arcane_trickster",
+  "class_slug": "rogue",
+  "name": "Arcane Trickster",
+  "description": "Improves your stealth through arcane spells.",
+  "features_by_level": {
+    "3": [
+      "Spellcasting",
+      "Mage Hand Legerdemain"
+    ],
+    "9": [
+      "Magical Ambush"
+    ],
+    "13": [
+      "Versatile Trickster"
+    ],
+    "17": [
+      "Spell Thief"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

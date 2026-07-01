@@ -1,0 +1,20 @@
+{
+  "slug": "college_of_valor",
+  "class_slug": "bard",
+  "name": "College of Valor",
+  "description": "Sings of the deeds of heroes of old.",
+  "features_by_level": {
+    "3": [
+      "Martial Training",
+      "Combat Inspiration"
+    ],
+    "6": [
+      "Extra Attack"
+    ],
+    "14": [
+      "Battle Magic"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

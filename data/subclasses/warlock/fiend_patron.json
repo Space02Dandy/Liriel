@@ -1,0 +1,57 @@
+{
+  "slug": "fiend_patron",
+  "class_slug": "warlock",
+  "name": "Fiend Patron",
+  "description": "Your patron is a being from Hell.",
+  "features_by_level": {
+    "3": [
+      "Fiend Spells",
+      "Dark One's Blessing",
+      "Dark One's Own Luck"
+    ],
+    "6": [
+      "Dark One's Own Luck"
+    ],
+    "10": [
+      "Fiendish Resilience"
+    ],
+    "14": [
+      "Hurl Through Hell"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "command",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "bane",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "crown_of_madness",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "inflict_wounds",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "mass_suggestion",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "wall_of_fire",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "dominate_monster",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "banishment",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": []
+}

@@ -1,0 +1,81 @@
+{
+  "slug": "aberrant_sorcery",
+  "class_slug": "sorcerer",
+  "name": "Aberrant Sorcery",
+  "description": "Wields unnatural psionic power from the Far Realm.",
+  "features_by_level": {
+    "3": [
+      "Psionic Spells",
+      "Telepathic Speech"
+    ],
+    "6": [
+      "Psionic Sorcery",
+      "Psychic Defenses"
+    ],
+    "14": [
+      "Revelation in Flesh"
+    ],
+    "18": [
+      "Warping Implosion"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "arms_of_hadar",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "calm_emotions",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "detect_thoughts",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "mind_spike",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "dissonant_whispers",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "hunger_of_hadar",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "sending",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "summon_aberration",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "evards_black_tentacles",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "rarys_telepathic_bond",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "telekinesis",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": [
+    "arms_of_hadar",
+    "calm_emotions",
+    "detect_thoughts",
+    "mind_spike",
+    "dissonant_whispers",
+    "hunger_of_hadar",
+    "sending",
+    "summon_aberration",
+    "evards_black_tentacles",
+    "rarys_telepathic_bond",
+    "telekinesis"
+  ]
+}

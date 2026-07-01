@@ -1,0 +1,73 @@
+{
+  "slug": "light_domain",
+  "class_slug": "cleric",
+  "name": "Light Domain",
+  "description": "Brings light to drive away darkness.",
+  "features_by_level": {
+    "3": [
+      "Light Domain Spells",
+      "Radiance of the Dawn",
+      "Warding Flare"
+    ],
+    "6": [
+      "Improved Warding Flare"
+    ],
+    "17": [
+      "Corona of Light"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "faerie_fire",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "burning_hands",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "scorching_ray",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "see_invisibility",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "fireball",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "daylight",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "wall_of_fire",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "arcane_eye",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "scrying",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "fire_bolt",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": [
+    "faerie_fire",
+    "burning_hands",
+    "scorching_ray",
+    "see_invisibility",
+    "fireball",
+    "daylight",
+    "wall_of_fire",
+    "arcane_eye",
+    "scrying",
+    "fire_bolt"
+  ]
+}

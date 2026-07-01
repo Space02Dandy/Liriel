@@ -1,0 +1,23 @@
+{
+  "slug": "soulknife",
+  "class_slug": "rogue",
+  "name": "Soulknife",
+  "description": "Strikes enemies with psionic blades.",
+  "features_by_level": {
+    "3": [
+      "Psychic Blades",
+      "Psionic Power"
+    ],
+    "9": [
+      "Soul Blades"
+    ],
+    "13": [
+      "Psychic Veil"
+    ],
+    "17": [
+      "Rend Mind"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

@@ -1,0 +1,158 @@
+{
+  "slug": "rogue",
+  "name": "Rogue",
+  "hit_die": 8,
+  "primary_ability": "DEX",
+  "saving_throws": [
+    "DEX",
+    "INT"
+  ],
+  "armor_proficiencies": [
+    "light"
+  ],
+  "weapon_proficiencies": [
+    "simple",
+    "hand_crossbow",
+    "longsword",
+    "rapier",
+    "shortsword"
+  ],
+  "tool_proficiencies": [
+    "thieves_tools"
+  ],
+  "skill_choices": {
+    "count": 4,
+    "from": [
+      "Acrobatics",
+      "Athletics",
+      "Deception",
+      "Insight",
+      "Intimidation",
+      "Investigation",
+      "Perception",
+      "Performance",
+      "Persuasion",
+      "Sleight_of_Hand",
+      "Stealth"
+    ]
+  },
+  "spellcasting": null,
+  "features_by_level": {
+    "1": [
+      "expertise",
+      "sneak_attack",
+      "thieves_cant",
+      "weapon_mastery"
+    ],
+    "2": [
+      "cunning_action"
+    ],
+    "3": [
+      "steady_aim",
+      "subclass_choice"
+    ],
+    "4": [
+      "asi"
+    ],
+    "5": [
+      "cunning_strike",
+      "uncanny_dodge"
+    ],
+    "6": [
+      "expertise"
+    ],
+    "7": [
+      "evasion",
+      "reliable_talent"
+    ],
+    "8": [
+      "asi"
+    ],
+    "9": [
+      "subclass_feature"
+    ],
+    "10": [
+      "asi"
+    ],
+    "11": [
+      "improved_cunning_strike"
+    ],
+    "12": [
+      "asi"
+    ],
+    "13": [
+      "subclass_feature"
+    ],
+    "14": [
+      "devious_strikes"
+    ],
+    "15": [
+      "slippery_mind"
+    ],
+    "16": [
+      "asi"
+    ],
+    "17": [
+      "subclass_feature"
+    ],
+    "18": [
+      "elusive"
+    ],
+    "19": [
+      "asi"
+    ],
+    "20": [
+      "stroke_of_luck"
+    ]
+  },
+  "subclass_level": 3,
+  "subclasses": [
+    "arcane_trickster",
+    "assassin",
+    "soulknife",
+    "thief"
+  ],
+  "equipment_choices": [
+    [
+      {
+        "slug": "leather_armor",
+        "qty": 1
+      },
+      {
+        "slug": "shortsword",
+        "qty": 2
+      },
+      {
+        "slug": "thieves_tools",
+        "qty": 1
+      },
+      {
+        "slug": "thieves_pack",
+        "qty": 1
+      },
+      {
+        "slug": "dagger",
+        "qty": 2
+      },
+      {
+        "slug": "gp",
+        "qty": 8
+      }
+    ]
+  ],
+  "starting_gold": 100,
+  "asi_levels": [
+    4,
+    8,
+    10,
+    12,
+    16,
+    19
+  ],
+  "multiclass_requirements": [
+    {
+      "ability": "DEX",
+      "min_score": 13
+    }
+  ]
+}

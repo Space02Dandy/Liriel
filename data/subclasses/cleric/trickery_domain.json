@@ -1,0 +1,73 @@
+{
+  "slug": "trickery_domain",
+  "class_slug": "cleric",
+  "name": "Trickery Domain",
+  "description": "Pulls pranks and challenges authority with the magic of deceit.",
+  "features_by_level": {
+    "3": [
+      "Trickery Domain Spells",
+      "Blessing of the Trickster",
+      "Invoke Duplicity"
+    ],
+    "6": [
+      "Trickster's Transposition"
+    ],
+    "17": [
+      "Improved Duplicity"
+    ]
+  },
+  "bonus_spells": [
+    {
+      "spell_slug": "disguise_self",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "charm_person",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "invisibility",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "pass_without_trace",
+      "class_level": 3
+    },
+    {
+      "spell_slug": "nondetection",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "hypnotic_pattern",
+      "class_level": 5
+    },
+    {
+      "spell_slug": "confusion",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "dimension_door",
+      "class_level": 7
+    },
+    {
+      "spell_slug": "modify_memory",
+      "class_level": 9
+    },
+    {
+      "spell_slug": "dominate_person",
+      "class_level": 9
+    }
+  ],
+  "spell_locks": [
+    "disguise_self",
+    "charm_person",
+    "invisibility",
+    "pass_without_trace",
+    "nondetection",
+    "hypnotic_pattern",
+    "confusion",
+    "dimension_door",
+    "modify_memory",
+    "dominate_person"
+  ]
+}

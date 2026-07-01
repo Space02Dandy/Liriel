@@ -1,0 +1,23 @@
+{
+  "slug": "path_of_the_zealot",
+  "class_slug": "barbarian",
+  "name": "Path of the Zealot",
+  "description": "Expresses your rage in ecstatic union with a deity.",
+  "features_by_level": {
+    "3": [
+      "Divine Fury",
+      "Warrior of the Gods"
+    ],
+    "6": [
+      "Fanatical Focus"
+    ],
+    "10": [
+      "Zealous Presence"
+    ],
+    "14": [
+      "Rage of the Gods"
+    ]
+  },
+  "bonus_spells": [],
+  "spell_locks": []
+}

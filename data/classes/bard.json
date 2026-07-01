@@ -1,0 +1,320 @@
+{
+  "slug": "bard",
+  "name": "Bard",
+  "hit_die": 8,
+  "primary_ability": "CHA",
+  "saving_throws": [
+    "DEX",
+    "CHA"
+  ],
+  "armor_proficiencies": [
+    "light"
+  ],
+  "weapon_proficiencies": [
+    "simple",
+    "hand_crossbow",
+    "longsword",
+    "rapier",
+    "shortsword"
+  ],
+  "tool_proficiencies": [
+    "musical_instrument:3"
+  ],
+  "skill_choices": {
+    "count": 3,
+    "from": [
+      "Acrobatics",
+      "Animal_Handling",
+      "Arcana",
+      "Athletics",
+      "Deception",
+      "History",
+      "Insight",
+      "Intimidation",
+      "Investigation",
+      "Medicine",
+      "Nature",
+      "Perception",
+      "Performance",
+      "Persuasion",
+      "Religion",
+      "Sleight_of_Hand",
+      "Stealth",
+      "Survival"
+    ]
+  },
+  "spellcasting": {
+    "ability": "CHA",
+    "preparation": "known",
+    "caster_type": "full",
+    "cantrips_known": {
+      "1": 2,
+      "4": 3,
+      "10": 4
+    },
+    "spells_known": {
+      "1": 4,
+      "2": 5,
+      "3": 6,
+      "4": 7,
+      "5": 8,
+      "6": 9,
+      "7": 10,
+      "8": 11,
+      "9": 12,
+      "10": 14,
+      "11": 15,
+      "13": 16,
+      "15": 18,
+      "17": 20,
+      "18": 22
+    },
+    "slots": {
+      "1": {
+        "1": 2
+      },
+      "2": {
+        "1": 3
+      },
+      "3": {
+        "1": 4,
+        "2": 2
+      },
+      "4": {
+        "1": 4,
+        "2": 3
+      },
+      "5": {
+        "1": 4,
+        "2": 3,
+        "3": 2
+      },
+      "6": {
+        "1": 4,
+        "2": 3,
+        "3": 3
+      },
+      "7": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 1
+      },
+      "8": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 2
+      },
+      "9": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 1
+      },
+      "10": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2
+      },
+      "11": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1
+      },
+      "12": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1
+      },
+      "13": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1,
+        "7": 1
+      },
+      "14": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1,
+        "7": 1
+      },
+      "15": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1,
+        "7": 1,
+        "8": 1
+      },
+      "16": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1,
+        "7": 1,
+        "8": 1
+      },
+      "17": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 2,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1
+      },
+      "18": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 1,
+        "7": 1,
+        "8": 1,
+        "9": 1
+      },
+      "19": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 2,
+        "7": 1,
+        "8": 1,
+        "9": 1
+      },
+      "20": {
+        "1": 4,
+        "2": 3,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 2,
+        "7": 2,
+        "8": 1,
+        "9": 1
+      }
+    }
+  },
+  "features_by_level": {
+    "1": [
+      "bardic_inspiration",
+      "spellcasting"
+    ],
+    "2": [
+      "expertise",
+      "jack_of_all_trades"
+    ],
+    "3": [
+      "subclass_choice"
+    ],
+    "4": [
+      "asi"
+    ],
+    "5": [
+      "font_of_inspiration"
+    ],
+    "6": [
+      "subclass_feature"
+    ],
+    "7": [
+      "countercharm"
+    ],
+    "8": [
+      "asi"
+    ],
+    "9": [
+      "expertise"
+    ],
+    "10": [
+      "magical_secrets"
+    ],
+    "11": [],
+    "12": [
+      "asi"
+    ],
+    "13": [],
+    "14": [
+      "subclass_feature"
+    ],
+    "15": [],
+    "16": [
+      "asi"
+    ],
+    "17": [],
+    "18": [
+      "superior_inspiration"
+    ],
+    "19": [
+      "asi"
+    ],
+    "20": [
+      "words_of_creation"
+    ]
+  },
+  "subclass_level": 3,
+  "subclasses": [
+    "college_of_dance",
+    "college_of_lore",
+    "college_of_glamour",
+    "college_of_valor"
+  ],
+  "equipment_choices": [
+    [
+      {
+        "slug": "leather_armor",
+        "qty": 1
+      },
+      {
+        "slug": "dagger",
+        "qty": 2
+      },
+      {
+        "slug": "entertainer_pack",
+        "qty": 1
+      },
+      {
+        "slug": "gp",
+        "qty": 19
+      }
+    ]
+  ],
+  "starting_gold": 90,
+  "asi_levels": [
+    4,
+    8,
+    12,
+    16,
+    19
+  ],
+  "multiclass_requirements": [
+    {
+      "ability": "CHA",
+      "min_score": 13
+    }
+  ]
+}

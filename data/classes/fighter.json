@@ -1,0 +1,160 @@
+{
+  "slug": "fighter",
+  "name": "Fighter",
+  "hit_die": 10,
+  "primary_ability": "STR",
+  "saving_throws": [
+    "STR",
+    "CON"
+  ],
+  "armor_proficiencies": [
+    "light",
+    "medium",
+    "heavy",
+    "shield"
+  ],
+  "weapon_proficiencies": [
+    "simple",
+    "martial"
+  ],
+  "tool_proficiencies": [],
+  "skill_choices": {
+    "count": 2,
+    "from": [
+      "Acrobatics",
+      "Animal_Handling",
+      "Athletics",
+      "History",
+      "Insight",
+      "Intimidation",
+      "Perception",
+      "Survival"
+    ]
+  },
+  "spellcasting": null,
+  "features_by_level": {
+    "1": [
+      "fighting_style",
+      "second_wind",
+      "weapon_mastery"
+    ],
+    "2": [
+      "action_surge",
+      "tactical_mind"
+    ],
+    "3": [
+      "subclass_choice"
+    ],
+    "4": [
+      "asi"
+    ],
+    "5": [
+      "extra_attack"
+    ],
+    "6": [
+      "asi"
+    ],
+    "7": [
+      "subclass_feature"
+    ],
+    "8": [
+      "asi"
+    ],
+    "9": [
+      "indomitable",
+      "tactical_shift"
+    ],
+    "10": [
+      "subclass_feature"
+    ],
+    "11": [
+      "two_extra_attacks"
+    ],
+    "12": [
+      "asi"
+    ],
+    "13": [
+      "indomitable_2",
+      "studied_attacks"
+    ],
+    "14": [
+      "asi"
+    ],
+    "15": [
+      "subclass_feature"
+    ],
+    "16": [
+      "asi"
+    ],
+    "17": [
+      "action_surge_2",
+      "indomitable_3"
+    ],
+    "18": [
+      "subclass_feature"
+    ],
+    "19": [
+      "asi"
+    ],
+    "20": [
+      "three_extra_attacks"
+    ]
+  },
+  "subclass_level": 3,
+  "subclasses": [
+    "arcane_knight",
+    "battle_master",
+    "champion",
+    "psi_warrior"
+  ],
+  "equipment_choices": [
+    [
+      {
+        "slug": "chain_mail",
+        "qty": 1
+      },
+      {
+        "slug": "longsword",
+        "qty": 1
+      },
+      {
+        "slug": "shield",
+        "qty": 1
+      },
+      {
+        "slug": "handaxe",
+        "qty": 2
+      },
+      {
+        "slug": "dungeoneer_pack",
+        "qty": 1
+      },
+      {
+        "slug": "gp",
+        "qty": 11
+      }
+    ]
+  ],
+  "starting_gold": 175,
+  "asi_levels": [
+    4,
+    6,
+    8,
+    12,
+    14,
+    16,
+    19
+  ],
+  "multiclass_requirements": [
+    {
+      "ability": "STR",
+      "min_score": 13,
+      "operator": "OR"
+    },
+    {
+      "ability": "DEX",
+      "min_score": 13,
+      "operator": "OR"
+    }
+  ]
+}
